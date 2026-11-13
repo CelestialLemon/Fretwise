@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Tuner"
+rootProject.name = "Fretwise"
 include(":app")
