@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // Tuning takes both hands; don't let the screen dim halfway through.
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (intent.getBooleanExtra("capture", false)) viewModel.capture(java.io.File(getExternalFilesDir(null), "capture.f32"))
 
         setContent {
             TunerTheme {

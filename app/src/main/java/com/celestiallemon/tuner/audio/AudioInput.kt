@@ -24,6 +24,12 @@ class AudioInput(private val context: Context) {
     @Volatile private var thread: Thread? = null
     @Volatile private var running = false
 
+    /**
+     * Debugging aid: when set, raw mic samples are appended here (float32 LE, 48 kHz) for replaying through
+     * CaptureReplayTest. Only enabled by launching with `adb shell am start ... --ez capture true`.
+     */
+    @Volatile var captureFile: java.io.File? = null
+
     /** Sets how detectors are built for the device sample rate. Takes effect on the next hop. */
     fun setDetector(factory: (sampleRate: Int) -> PitchDetector) {
         detectorFactory = factory
@@ -74,6 +80,11 @@ class AudioInput(private val context: Context) {
                     read += n
                 }
                 if (!running) break
+                captureFile?.let { file ->
+                    val bytes = java.nio.ByteBuffer.allocate(HopSize * 4).order(java.nio.ByteOrder.LITTLE_ENDIAN)
+                    for (x in hop) bytes.putFloat(x)
+                    java.io.FileOutputStream(file, true).use { it.write(bytes.array()) }
+                }
 
                 if (detectorFactory !== factory) {
                     factory = detectorFactory

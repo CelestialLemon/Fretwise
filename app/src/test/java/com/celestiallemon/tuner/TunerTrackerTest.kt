@@ -19,9 +19,9 @@ class TunerTrackerTest {
         return reading
     }
 
-    private fun TunerTracker.silence(frames: Int): Reading {
+    private fun TunerTracker.silence(frames: Int, level: Double = -80.0): Reading {
         var reading = Reading()
-        repeat(frames) { reading = process(Frame(null, -80.0, hop)) }
+        repeat(frames) { reading = process(Frame(null, level + (it % 3) * 1.5, hop)) }
         return reading
     }
 
@@ -90,6 +90,50 @@ class TunerTrackerTest {
         val reading = tracker.play("A2", 0.0, 20)
         assertEquals(0.0, reading.cents, 0.5)
         assertEquals(108.0, reading.frequency!!, 0.1)
+    }
+
+    @Test
+    fun quietStringsInANoisyRoomAreHeard() {
+        // Levels from a real recording: room at about -55 dBFS, open strings ringing at -40 to -48.
+        val tracker = TunerTracker(standard, 440.0)
+        tracker.silence(200, level = -56.0)
+        val reading = tracker.play("E4", -7.0, 30, level = -46.0)
+        assertTrue(reading.active)
+        assertEquals(5, reading.stringIndex)
+    }
+
+    @Test
+    fun dStringHeardAtItsSecondHarmonicStillReadsAsD() {
+        // A phone mic barely picks up D3's fundamental; the detector reports D4, which is 200 cents from high E.
+        val tracker = TunerTracker(standard, 440.0)
+        tracker.silence(50)
+        val reading = tracker.play("D4", 1.0, 20)
+        assertEquals(2, reading.stringIndex)
+        assertEquals(1.0, reading.cents, 0.5)
+    }
+
+    @Test
+    fun fadingNoteThatSlipsAnOctaveDownStaysPut() {
+        val tracker = TunerTracker(standard, 440.0)
+        tracker.silence(50)
+        tracker.play("A2", 2.0, 20, level = -44.0)
+        val slipped = tracker.play("A1", 2.0, 10, level = -48.0)
+        assertTrue(slipped.active)
+        assertEquals(1, slipped.stringIndex)
+        assertEquals(2.0, slipped.cents, 0.5)
+    }
+
+    @Test
+    fun aGlidingVoiceDoesNotRegister() {
+        val tracker = TunerTracker(standard, 440.0)
+        tracker.silence(50)
+        var reading = Reading()
+        // Pitch sliding 15 cents per frame, as speech does.
+        for (i in 0 until 30) {
+            val f = Note.parse("A2").frequency(440.0) * 2.0.pow((-200 + i * 15) / 1200.0)
+            reading = tracker.process(Frame(Pitch(f, 0.9), -35.0, hop))
+        }
+        assertFalse(reading.active)
     }
 
     @Test

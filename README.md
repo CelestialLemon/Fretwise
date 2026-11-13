@@ -11,3 +11,9 @@ A guitar tuner for Android that detects which string you're playing.
 ./gradlew recordRoborazziDebug       # renders docs/screenshots/
 ./gradlew assembleRelease            # app/build/outputs/apk/release/app-release.apk
 ```
+
+## Debugging with real audio
+
+Launch with `adb shell am start -n com.celestiallemon.tuner/.MainActivity --ez capture true` to save the raw mic
+input to `/sdcard/Android/data/com.celestiallemon.tuner/files/capture.f32`, then pull it and replay it through the
+pipeline: `CAPTURE=capture.f32 REPLAY_OUT=replay.txt ./gradlew testDebugUnitTest --tests '*CaptureReplayTest*'`.

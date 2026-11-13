@@ -50,6 +50,11 @@ class TunerViewModel(application: Application) : AndroidViewModel(application) {
 
     fun stop() = audio.stop()
 
+    fun capture(file: java.io.File) {
+        file.delete()
+        audio.captureFile = file
+    }
+
     fun selectTuning(instrument: Instrument, tuning: Tuning) {
         val instrumentChanged = instrument != _state.value.instrument
         synchronized(tracker) { tracker.tuning = tuning }

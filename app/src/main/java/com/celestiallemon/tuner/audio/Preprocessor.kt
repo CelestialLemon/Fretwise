@@ -16,7 +16,7 @@ class Preprocessor(sampleRate: Int, lowPassHz: Double) {
     private var dcOut = 0.0
     private val stages = listOf(Biquad(sampleRate, lowPassHz, 0.5412), Biquad(sampleRate, lowPassHz, 1.3066))
 
-    /** Filters [samples] in place and returns their full-band RMS (after the DC blocker, before the low-pass). */
+    /** Filters [samples] in place and returns their RMS after filtering: the loudness within the instrument's band. */
     fun process(samples: FloatArray, count: Int = samples.size): Double {
         var energy = 0.0
         for (i in 0 until count) {
@@ -27,7 +27,7 @@ class Preprocessor(sampleRate: Int, lowPassHz: Double) {
             var y = hp
             for (stage in stages) y = stage.process(y)
             samples[i] = y.toFloat()
-            energy += hp * hp
+            energy += y * y
         }
         return sqrt(energy / count)
     }
