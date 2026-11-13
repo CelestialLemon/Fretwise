@@ -96,7 +96,7 @@ class MetronomeEngine {
     }
 
     /** Plays until [running] goes false. Returns false if the audio stream failed. */
-    private fun run(session: Session): Boolean {
+    private fun run(mine: Session): Boolean {
         Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
         val minBuffer = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_FLOAT)
         val t = AudioTrack.Builder()
@@ -127,8 +127,9 @@ class MetronomeEngine {
         var ok = true
         try {
             t.play()
-            track = t
-            while (session.active) {
+            // Publish the track only if this session is still the live one.
+            synchronized(this) { if (session === mine && mine.active) track = t }
+            while (mine.active) {
                 chunk.fill(0f)
                 val end = written + chunk.size
                 var i = 0
@@ -167,7 +168,7 @@ class MetronomeEngine {
             }
         } finally {
             runCatching { t.pause(); t.flush(); t.stop() }
-            if (track === t) track = null
+            synchronized(this) { if (track === t) track = null }
             t.release()
         }
         return ok
