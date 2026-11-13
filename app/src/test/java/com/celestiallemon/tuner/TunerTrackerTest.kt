@@ -151,4 +151,29 @@ class TunerTrackerTest {
         assertEquals("C♯5", reading.target.toString())
         assertEquals(-20.0, reading.cents, 0.5)
     }
+
+    @Test
+    fun aStringOnTheEdgeOfInTuneDoesNotFlicker() {
+        // Readings wobbling between +3 and +5 cents, as a real B string did, stay green throughout.
+        val tracker = TunerTracker(standard, 440.0)
+        tracker.silence(50)
+        tracker.play("B3", 3.0, 10)
+        for (i in 0 until 40) {
+            val reading = tracker.play("B3", if (i % 4 < 2) 5.0 else 3.0, 1)
+            assertTrue("frame $i: ${reading.cents}", reading.inTune)
+        }
+        // Clearly sharp turns it off again.
+        assertFalse(tracker.play("B3", 9.0, 20).inTune)
+    }
+
+    @Test
+    fun shakyFramesAsANoteFadesMoveTheReadingLess() {
+        val tracker = TunerTracker(standard, 440.0)
+        tracker.silence(50)
+        tracker.play("B3", 0.0, 20)
+        val f = Note.parse("B3").frequency(440.0) * 2.0.pow(8 / 1200.0)
+        var reading = Reading()
+        repeat(3) { reading = tracker.process(Frame(Pitch(f, 0.62), -30.0, hop)) }
+        assertTrue(reading.cents < 2.5)
+    }
 }

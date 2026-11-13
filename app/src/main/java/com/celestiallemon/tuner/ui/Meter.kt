@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.celestiallemon.tuner.Note
+import com.celestiallemon.tuner.TunerTracker
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.min
@@ -98,7 +99,7 @@ fun Meter(
         }
     }
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                if (active) {
+                if (active && !inTune) {
                     Text(
                         text = formatCents(cents),
                         color = stateColor,
@@ -155,7 +156,7 @@ private fun DrawScope.drawDial(center: Offset, r: Float, needle: Float, color: C
     val needleAngle = needle / 50f * Sweep
 
     // In-tune zone: a short green arc just outside the scale, glowing while the string is in tune.
-    val bandAngle = 3f / 50f * Sweep
+    val bandAngle = TunerTracker.InTuneCents.toFloat() / 50f * Sweep
     val bandRadius = r + 9.dp.toPx()
     fun band(color: Color, width: Float, extra: Float) = drawArc(
         color = color,

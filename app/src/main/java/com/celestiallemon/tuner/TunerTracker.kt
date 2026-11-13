@@ -60,6 +60,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
         set(value) {
             field = value
             if (value != null) currentString = value
+            inTune = false
             inTuneSeconds = 0.0
         }
 
@@ -75,6 +76,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
     private var candidateFrames = 0
     private var chromaticNote: Int? = null
 
+    private var inTune = false
     private var inTuneSeconds = 0.0
     private var offSeconds = 0.0
     private val tuned = mutableSetOf<Int>()
@@ -104,7 +106,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
 
         if (valid) {
             val hz = a4 * 2.0.pow(cents!! / 1200)
-            if (smoothed == null) confirm(cents, hz, frame.seconds) else accept(cents, hz, frame.seconds)
+            if (smoothed == null) confirm(cents, hz, frame.seconds) else accept(cents, hz, pitch.clarity, frame.seconds)
         } else {
             pending.clear()
             silentSeconds += frame.seconds
@@ -176,7 +178,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
         noiseFloorDb = noiseFloorDb.coerceIn(-95.0, -40.0)
     }
 
-    private fun accept(measured: Double, frequency: Double, seconds: Double) {
+    private fun accept(measured: Double, frequency: Double, clarity: Double, seconds: Double) {
         // A ringing string doesn't change octave; a reading exactly an octave off is the detector slipping.
         var cents = measured
         var hz = frequency
@@ -200,7 +202,9 @@ class TunerTracker(tuning: Tuning, a4: Double) {
         if (history.size > MedianSize) history.removeFirst()
         val median = median()
         val fresh = smoothed == null
-        smoothed = smoothed?.let { it + Smoothing * (median - it) } ?: median
+        // A fading note gives shakier estimates: let those nudge the reading less so it doesn't wobble at the end.
+        val weight = ((clarity - HoldClarity) / (FirmClarity - HoldClarity)).coerceIn(0.3, 1.0)
+        smoothed = smoothed?.let { it + Smoothing * weight * (median - it) } ?: median
         lastFrequency = hz
         if (fresh) {
             // A real new note after a jump still has to prove itself steady.
@@ -222,7 +226,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
             val current = chromaticNote
             // Keep the current note until we're clearly past the halfway point to the next one.
             if (fresh || current == null || abs(pitch - (current - 69) * 100.0) > 58) {
-                if (current != nearest) inTuneSeconds = 0.0
+                if (current != nearest) { inTune = false; inTuneSeconds = 0.0 }
                 chromaticNote = nearest
             }
             return
@@ -247,7 +251,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
     }
 
     private fun switchTo(index: Int) {
-        if (currentString != index) inTuneSeconds = 0.0
+        if (currentString != index) { inTune = false; inTuneSeconds = 0.0 }
         currentString = index
         candidateString = null
         candidateFrames = 0
@@ -256,7 +260,9 @@ class TunerTracker(tuning: Tuning, a4: Double) {
     private fun trackInTune(seconds: Double) {
         val cents = centsOff() ?: return
         val string = if (tuning.strings.isEmpty()) null else currentString
-        if (abs(cents) <= InTuneCents) {
+        // Hysteresis: once green, stay green until clearly off, so a string sitting on the edge doesn't flicker.
+        inTune = abs(cents) <= if (inTune) InTuneExitCents else InTuneCents
+        if (inTune) {
             inTuneSeconds += seconds
             offSeconds = 0.0
             if (string != null && inTuneSeconds >= ConfirmSeconds && tuned.add(string)) tunedEvent++
@@ -288,7 +294,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
             stringIndex = if (tuning.strings.isEmpty()) null else currentString,
             target = target(),
             cents = cents ?: 0.0,
-            inTune = cents != null && abs(cents) <= InTuneCents,
+            inTune = cents != null && inTune,
             tuned = tuned.toSet(),
             level = if (active) level else 0f,
             tunedEvent = tunedEvent,
@@ -306,13 +312,20 @@ class TunerTracker(tuning: Tuning, a4: Double) {
         history.clear()
         smoothed = null
         jumpFrames = 0
+        inTune = false
         inTuneSeconds = 0.0
         lastFrequency = null
     }
 
     companion object {
-        /** Within this many cents counts as in tune. Most ears can't hear under ~5 cents on a single string. */
-        const val InTuneCents = 3.0
+        /**
+         * Within this many cents turns the reading green. Most ears can't hear under ~5 cents on a single string, and
+         * a phone across a room measures to about ±1 cent, so tighter than this just makes the last turn fiddly.
+         */
+        const val InTuneCents = 4.0
+
+        /** Once green, the reading stays green until it's this far off. */
+        const val InTuneExitCents = 6.0
 
         /** A tuned string loses its checkmark once it drifts this far for a moment. */
         const val DetunedCents = 10.0
@@ -331,6 +344,7 @@ class TunerTracker(tuning: Tuning, a4: Double) {
         private const val AbsoluteGateDb = -80.0
         private const val StartClarity = 0.72
         private const val HoldClarity = 0.6
+        private const val FirmClarity = 0.85
         private const val ConfirmFrames = 4
         private const val SteadyCents = 30.0
         private const val OnsetDb = 8.0
