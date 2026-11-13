@@ -14,7 +14,19 @@ import com.celestiallemon.tuner.ui.LocalStillFrames
 import com.celestiallemon.tuner.ui.Palette
 import com.celestiallemon.tuner.ui.PermissionScreen
 import com.celestiallemon.tuner.ui.TunerScreen
-import com.celestiallemon.tuner.ui.TunerTheme
+import com.celestiallemon.tuner.metronome.MetronomeUiState
+import com.celestiallemon.tuner.metronome.TimeSignature
+import com.celestiallemon.tuner.repertoire.Level
+import com.celestiallemon.tuner.repertoire.RepertoireUiState
+import com.celestiallemon.tuner.repertoire.Song
+import com.celestiallemon.tuner.repertoire.planDay
+import com.celestiallemon.tuner.ui.AppShell
+import com.celestiallemon.tuner.ui.FretwiseTheme
+import com.celestiallemon.tuner.ui.MetronomeScreen
+import com.celestiallemon.tuner.ui.RepertoireActions
+import com.celestiallemon.tuner.ui.RepertoireScreen
+import com.celestiallemon.tuner.ui.Tab
+import java.time.LocalDate
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,8 +41,8 @@ class ScreenshotTest {
     private fun snap(name: String, content: @Composable () -> Unit) {
         captureRoboImage("../docs/screenshots/$name.png") {
             CompositionLocalProvider(LocalStillFrames provides true) {
-                TunerTheme {
-                    Box(Modifier.fillMaxSize().background(Palette.Background).padding(top = 32.dp, bottom = 16.dp)) { content() }
+                FretwiseTheme {
+                    Box(Modifier.fillMaxSize().background(Palette.Background).padding(top = 32.dp)) { content() }
                 }
             }
         }
@@ -39,7 +51,11 @@ class ScreenshotTest {
 
     private val guitar = TunerUiState()
 
-    private fun tuner(name: String, state: TunerUiState) = snap(name) {
+    private fun shell(name: String, tab: Tab, playing: Boolean = false, left: Int = 2, content: @Composable () -> Unit) = snap(name) {
+        AppShell(tab = tab, onTab = {}, metronomePlaying = playing, songsLeftToday = left) { content() }
+    }
+
+    private fun tuner(name: String, state: TunerUiState) = shell(name, Tab.Tuner) {
         TunerScreen(state, onSelectTuning = { _, _ -> }, onA4Change = {}, onLockString = {})
     }
 
@@ -101,6 +117,42 @@ class ScreenshotTest {
         TunerUiState(instrument = Instruments.SevenString, tuning = Instruments.SevenString.tunings.first(),
             reading = Reading(stringIndex = 0, target = Note.parse("B1"), tuned = setOf(1, 2, 3, 4, 5, 6))),
     )
+
+    @Test
+    fun metronome() = shell("9-metronome", Tab.Metronome) {
+        MetronomeScreen(
+            MetronomeUiState(bpm = 92, signature = TimeSignature.SixEight, songTitle = "Blackbird"),
+            engine = null, onToggle = {}, onBpm = {}, onNudge = {}, onTap = {}, onSignature = {},
+        )
+    }
+
+    private val today = LocalDate.of(2026, 11, 13)
+
+    private fun sample(id: String, title: String, artist: String, level: Level, bpm: Int?, vararg practiced: String) =
+        Song(id, title, artist, bpm, level = level, levelSince = id.hashCode().toLong(), addedAt = 0, practiced = practiced.toList())
+
+    @Test
+    fun repertoire() {
+        val songs = listOf(
+            sample("1", "Blackbird", "The Beatles", Level.L1, 92),
+            sample("2", "Tears in Heaven", "Eric Clapton", Level.L1, 80, "2026-11-10"),
+            sample("3", "Dust in the Wind", "Kansas", Level.L1, null, "2026-11-12"),
+            sample("4", "Romanza", "Anonymous", Level.L1, 60, "2026-11-11"),
+            sample("5", "Wish You Were Here", "Pink Floyd", Level.L2, 60, "2026-11-08", "2026-11-13"),
+            sample("6", "Hotel California", "Eagles", Level.L3, 74, "2026-11-09"),
+            sample("7", "Wonderwall", "Oasis", Level.Memory, 87, "2026-10-01"),
+            sample("8", "Horse with No Name", "America", Level.Memory, 123, "2026-11-01"),
+        )
+        val state = RepertoireUiState(loaded = true, songs = songs, today = today, plan = planDay(today, songs, null))
+        shell("10-repertoire", Tab.Repertoire, left = state.todaySongs.size - state.doneToday) {
+            RepertoireScreen(state, RepertoireActions())
+        }
+    }
+
+    @Test
+    fun repertoireEmpty() = shell("11-repertoire-empty", Tab.Repertoire, left = 0) {
+        RepertoireScreen(RepertoireUiState(loaded = true, today = today), RepertoireActions())
+    }
 
     @Test
     fun permission() = snap("8-permission") { PermissionScreen(false, {}, {}) }
