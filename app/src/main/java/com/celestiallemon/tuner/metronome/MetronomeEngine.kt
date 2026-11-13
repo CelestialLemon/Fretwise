@@ -35,7 +35,7 @@ class MetronomeEngine {
     @Volatile private var restartBar = false
     @Volatile private var running = false
     private var thread: Thread? = null
-    private var track: AudioTrack? = null
+    @Volatile private var track: AudioTrack? = null
 
     /** A beat that has been written to the stream. */
     data class Beat(val frame: Long, val serial: Long, val index: Int, val accent: Accent)
@@ -47,29 +47,45 @@ class MetronomeEngine {
     /** Called on the audio thread if playback ends by itself (the device refused or lost the audio stream). */
     @Volatile var onFailure: (() -> Unit)? = null
 
+    /** One play session. Each has its own flag, so a worker left over from an earlier session can't resume. */
+    private class Session {
+        @Volatile var active = true
+    }
+
+    private var session: Session? = null
+
     @Synchronized
     fun start() {
         if (running) return
         running = true
         synchronized(log) { log.clear() }
+        val current = Session().also { session = it }
         thread = Thread({
             val ok = try {
-                run()
+                run(current)
             } catch (e: Exception) {
                 false
             }
-            if (running) {
-                running = false
-                if (!ok) onFailure?.invoke()
+            synchronized(this) {
+                // Only the live session may report a failure or reset the engine.
+                if (current.active && session === current) {
+                    current.active = false
+                    running = false
+                    if (!ok) onFailure?.invoke()
+                }
             }
         }, "metronome").apply { start() }
     }
 
-    @Synchronized
     fun stop() {
-        running = false
-        thread?.join(500)
-        thread = null
+        val worker = synchronized(this) {
+            session?.active = false
+            session = null
+            running = false
+            thread.also { thread = null }
+        }
+        // Join outside the lock: the worker takes it briefly as it finishes.
+        worker?.join(500)
     }
 
     /** The latest beat whose click has reached the speaker, or null before the first one. */
@@ -80,7 +96,7 @@ class MetronomeEngine {
     }
 
     /** Plays until [running] goes false. Returns false if the audio stream failed. */
-    private fun run(): Boolean {
+    private fun run(session: Session): Boolean {
         Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
         val minBuffer = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_FLOAT)
         val t = AudioTrack.Builder()
@@ -112,7 +128,7 @@ class MetronomeEngine {
         try {
             t.play()
             track = t
-            while (running) {
+            while (session.active) {
                 chunk.fill(0f)
                 val end = written + chunk.size
                 var i = 0
@@ -151,7 +167,7 @@ class MetronomeEngine {
             }
         } finally {
             runCatching { t.pause(); t.flush(); t.stop() }
-            track = null
+            if (track === t) track = null
             t.release()
         }
         return ok

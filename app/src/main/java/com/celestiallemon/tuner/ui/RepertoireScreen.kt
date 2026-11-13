@@ -251,7 +251,7 @@ fun RepertoireScreen(
                             )
                         }
                     }
-                    items(songs, key = { it.id }) { song ->
+                    items(songs, key = { "song:${it.id}" }) { song ->
                         SongRow(
                             song = song,
                             isToday = state.plan.picks[level] == song.id,

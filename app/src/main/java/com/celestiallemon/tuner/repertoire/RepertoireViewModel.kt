@@ -2,7 +2,6 @@ package com.celestiallemon.tuner.repertoire
 
 import android.app.Application
 import android.net.Uri
-import android.util.AtomicFile
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +49,10 @@ data class SongDraft(
 )
 
 class RepertoireViewModel(application: Application) : AndroidViewModel(application) {
-    private val file = AtomicFile(File(application.filesDir, "repertoire.json"))
+    private val file = File(application.filesDir, "repertoire.json")
+
+    /** Set when an unreadable save file couldn't be moved aside; saving would destroy it, so it's off. */
+    @Volatile private var saveBlocked = false
     private val writeLock = Mutex()
 
     private val _state = MutableStateFlow(RepertoireUiState())
@@ -68,10 +70,14 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                 try {
                     load()
                 } catch (e: Exception) {
-                    // Keep the unreadable file aside instead of letting the next save overwrite it.
+                    // Move the unreadable file aside (a rename needs no free space) so no save overwrites it.
                     val kept = File(application.filesDir, "repertoire-unreadable-${System.currentTimeMillis()}.json")
-                    runCatching { file.baseFile.copyTo(kept) }
-                    _messages.send(Message("Couldn't read your saved songs. The file was kept as ${kept.name}."))
+                    if (file.renameTo(kept)) {
+                        _messages.send(Message("Couldn't read your saved songs. The file was kept as ${kept.name}."))
+                    } else {
+                        saveBlocked = true
+                        _messages.send(Message("Couldn't read your saved songs. Changes won't be saved, to protect them."))
+                    }
                     RepertoireData()
                 }
             }
@@ -211,13 +217,10 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                 // Read the state inside the lock so the last write always holds the newest data.
                 val snapshot = _state.value
                 val data = RepertoireData(songs = snapshot.songs, today = snapshot.plan)
-                var out: java.io.FileOutputStream? = null
+                if (saveBlocked) return@withLock
                 try {
-                    out = file.startWrite()
-                    out.write(BackupFormat.json.encodeToString(RepertoireData.serializer(), data).toByteArray())
-                    file.finishWrite(out)
+                    writeAtomically(BackupFormat.json.encodeToString(RepertoireData.serializer(), data).toByteArray())
                 } catch (e: Exception) {
-                    out?.let(file::failWrite)
                     // Every save writes the whole repertoire, so the next change retries this one.
                     _messages.send(Message("Couldn't save your changes. Check the phone's free storage."))
                 }
@@ -225,10 +228,26 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    /**
+     * Writes to a temp file, syncs it to disk, then renames it over the real file. The rename is atomic, so
+     * the saved file is always either the old version or the new one. Any failure throws.
+     */
+    private fun writeAtomically(bytes: ByteArray) {
+        val temp = File(file.parentFile, file.name + ".tmp")
+        java.io.FileOutputStream(temp).use { out ->
+            out.write(bytes)
+            out.fd.sync()
+        }
+        if (!temp.renameTo(file)) {
+            temp.delete()
+            throw java.io.IOException("Couldn't replace ${file.name}")
+        }
+    }
+
     /** Reads the saved repertoire. A missing file is an empty repertoire; a broken one throws. */
     private fun load(): RepertoireData {
-        if (!file.baseFile.exists()) return RepertoireData()
-        val data = BackupFormat.json.decodeFromString(RepertoireData.serializer(), file.readFully().decodeToString())
+        if (!file.exists()) return RepertoireData()
+        val data = BackupFormat.json.decodeFromString(RepertoireData.serializer(), file.readBytes().decodeToString())
         return data.copy(songs = data.songs.map(BackupFormat::normalized))
     }
 
