@@ -136,7 +136,7 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         val before = _state.value.song(id) ?: return
         updateSong(id) { it.movedTo(level, System.currentTimeMillis()) }
         val verb = if (level.ordinal > before.level.ordinal) "Moved up to" else "Moved back to"
-        _messages.trySend(Message("$verb ${level.label}") { updateSong(id) { before.copy(practiced = it.practiced) } })
+        _messages.trySend(Message("$verb ${level.label}") { updateSong(id) { it.copy(level = before.level, levelSince = before.levelSince) } })
     }
 
     fun delete(id: String) {
