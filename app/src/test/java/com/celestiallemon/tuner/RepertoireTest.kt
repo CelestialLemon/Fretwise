@@ -106,6 +106,14 @@ class RepertoireTest {
     fun backupRejectsJunk() {
         assertThrows(IllegalArgumentException::class.java) { BackupFormat.decode("not json") }
         assertThrows(IllegalArgumentException::class.java) { BackupFormat.decode("""{"version": 9, "songs": []}""") }
+        val badDate = BackupFormat.encode(listOf(song("a", Level.L1, 0, "yesterday")))
+        assertThrows(IllegalArgumentException::class.java) { BackupFormat.decode(badDate) }
+    }
+
+    @Test
+    fun backupNormalisesPracticeDates() {
+        val messy = BackupFormat.encode(listOf(song("a", Level.L1, 0, "2026-11-10", "2026-11-01", "2026-11-10")))
+        assertEquals(listOf("2026-11-01", "2026-11-10"), BackupFormat.decode(messy).single().practiced)
     }
 
     @Test

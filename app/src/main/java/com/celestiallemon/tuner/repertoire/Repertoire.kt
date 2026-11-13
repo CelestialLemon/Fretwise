@@ -130,6 +130,19 @@ object BackupFormat {
         }
         require(data.version <= 1) { "This backup is from a newer version of Fretwise." }
         require(data.songs.map { it.id }.toSet().size == data.songs.size) { "The backup has duplicate songs." }
-        return data.songs
+        require(data.songs.all { it.title.isNotBlank() }) { "The backup has a song without a title." }
+        return data.songs.map(::normalized)
+    }
+
+    /** Sorts and de-duplicates practice dates, rejecting any that aren't real ISO dates. */
+    fun normalized(song: Song): Song {
+        val dates = song.practiced.map { date ->
+            try {
+                LocalDate.parse(date)
+            } catch (e: Exception) {
+                throw IllegalArgumentException("The backup has an invalid practice date: $date", e)
+            }
+        }
+        return song.copy(practiced = dates.distinct().sorted().map(LocalDate::toString))
     }
 }

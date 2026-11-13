@@ -439,9 +439,13 @@ private fun RepeatButton(icon: androidx.compose.ui.graphics.vector.ImageVector, 
                             interval = (interval * 0.9).toLong().coerceAtLeast(35)
                         }
                     }
-                    waitForUpOrCancellation()
-                    repeat.cancel()
-                    scope.launch { interaction.emit(PressInteraction.Release(press)) }
+                    try {
+                        waitForUpOrCancellation()
+                    } finally {
+                        // Also runs when the gesture is cancelled, e.g. the button disables itself at the BPM limit.
+                        repeat.cancel()
+                        scope.launch { interaction.emit(PressInteraction.Release(press)) }
+                    }
                 }
             },
         contentAlignment = Alignment.Center,

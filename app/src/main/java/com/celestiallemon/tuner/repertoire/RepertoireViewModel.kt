@@ -64,7 +64,17 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
 
     init {
         viewModelScope.launch {
-            val data = withContext(Dispatchers.IO) { load() }
+            val data = withContext(Dispatchers.IO) {
+                try {
+                    load()
+                } catch (e: Exception) {
+                    // Keep the unreadable file aside instead of letting the next save overwrite it.
+                    val kept = File(application.filesDir, "repertoire-unreadable-${System.currentTimeMillis()}.json")
+                    runCatching { file.baseFile.copyTo(kept) }
+                    _messages.send(Message("Couldn't read your saved songs. The file was kept as ${kept.name}."))
+                    RepertoireData()
+                }
+            }
             val today = LocalDate.now()
             _state.value = RepertoireUiState(
                 loaded = true,
@@ -72,7 +82,6 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                 today = today,
                 plan = planDay(today, data.songs, data.today),
             )
-            persist()
             // Roll over to a fresh practice set at midnight even if the app stays open.
             while (true) {
                 val untilMidnight = Duration.between(LocalDateTime.now(), LocalDate.now().plusDays(1).atStartOfDay())
@@ -202,20 +211,26 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                 // Read the state inside the lock so the last write always holds the newest data.
                 val snapshot = _state.value
                 val data = RepertoireData(songs = snapshot.songs, today = snapshot.plan)
-                val out = file.startWrite()
+                var out: java.io.FileOutputStream? = null
                 try {
+                    out = file.startWrite()
                     out.write(BackupFormat.json.encodeToString(RepertoireData.serializer(), data).toByteArray())
                     file.finishWrite(out)
                 } catch (e: Exception) {
-                    file.failWrite(out)
+                    out?.let(file::failWrite)
+                    // Every save writes the whole repertoire, so the next change retries this one.
+                    _messages.send(Message("Couldn't save your changes. Check the phone's free storage."))
                 }
             }
         }
     }
 
-    private fun load(): RepertoireData = runCatching {
-        BackupFormat.json.decodeFromString(RepertoireData.serializer(), file.readFully().decodeToString())
-    }.getOrDefault(RepertoireData())
+    /** Reads the saved repertoire. A missing file is an empty repertoire; a broken one throws. */
+    private fun load(): RepertoireData {
+        if (!file.baseFile.exists()) return RepertoireData()
+        val data = BackupFormat.json.decodeFromString(RepertoireData.serializer(), file.readFully().decodeToString())
+        return data.copy(songs = data.songs.map(BackupFormat::normalized))
+    }
 
     private fun plural(n: Int) = if (n == 1) "song" else "songs"
 }

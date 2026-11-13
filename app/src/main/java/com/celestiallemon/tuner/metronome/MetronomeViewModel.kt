@@ -80,13 +80,15 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
     init {
         engine.bpm = _state.value.bpm
         engine.signature = _state.value.signature
+        engine.onFailure = { _state.update { it.copy(playing = false) } }
     }
 
     fun toggle() = if (_state.value.playing) stop() else play()
 
     fun play() {
-        engine.start()
+        // Mark playing first so a failure reported straight away by the engine isn't overwritten.
         _state.update { it.copy(playing = true) }
+        engine.start()
     }
 
     fun stop() {

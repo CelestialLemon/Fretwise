@@ -44,12 +44,25 @@ class MetronomeEngine {
 
     val isRunning get() = running
 
+    /** Called on the audio thread if playback ends by itself (the device refused or lost the audio stream). */
+    @Volatile var onFailure: (() -> Unit)? = null
+
     @Synchronized
     fun start() {
         if (running) return
         running = true
         synchronized(log) { log.clear() }
-        thread = Thread({ run() }, "metronome").apply { start() }
+        thread = Thread({
+            val ok = try {
+                run()
+            } catch (e: Exception) {
+                false
+            }
+            if (running) {
+                running = false
+                if (!ok) onFailure?.invoke()
+            }
+        }, "metronome").apply { start() }
     }
 
     @Synchronized
@@ -66,7 +79,8 @@ class MetronomeEngine {
         return synchronized(log) { log.lastOrNull { it.frame <= head } }
     }
 
-    private fun run() {
+    /** Plays until [running] goes false. Returns false if the audio stream failed. */
+    private fun run(): Boolean {
         Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO)
         val minBuffer = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_FLOAT)
         val t = AudioTrack.Builder()
@@ -87,8 +101,6 @@ class MetronomeEngine {
             .setPerformanceMode(AudioTrack.PERFORMANCE_MODE_LOW_LATENCY)
             .setBufferSizeInBytes(minBuffer * 2)
             .build()
-        track = t
-
         val chunk = FloatArray(256)
         var written = 0L
         var lastBeat = -1L
@@ -96,8 +108,10 @@ class MetronomeEngine {
         var beatInBar = 0
         var sound: FloatArray? = null
         var soundPos = 0
-        t.play()
+        var ok = true
         try {
+            t.play()
+            track = t
             while (running) {
                 chunk.fill(0f)
                 val end = written + chunk.size
@@ -129,14 +143,18 @@ class MetronomeEngine {
                     }
                     i++
                 }
-                if (t.write(chunk, 0, chunk.size, AudioTrack.WRITE_BLOCKING) < 0) break
+                if (t.write(chunk, 0, chunk.size, AudioTrack.WRITE_BLOCKING) < 0) {
+                    ok = false
+                    break
+                }
                 written = end
             }
         } finally {
             runCatching { t.pause(); t.flush(); t.stop() }
-            t.release()
             track = null
+            t.release()
         }
+        return ok
     }
 
     /** A short woodblock-like tick: two inharmonic partials with a fast decay and a soft attack. */
