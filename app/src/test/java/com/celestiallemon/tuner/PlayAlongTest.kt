@@ -111,18 +111,21 @@ class PlayAlongTest {
     }
 
     @Test
-    fun practiceProgressionPicksChorusNotPreChorus() {
+    fun practiceProgressionPicksFullRepeatingChorusPhrase() {
         val perfect = SongChart.decode(File(chartsDir, "perfect.json").readText())
         val prog = perfect.practiceProgression()
         assertEquals(listOf("Em", "C", "G", "D"), prog.map { it.chord })
         assertEquals(listOf(6, 6, 6, 6), prog.map { it.beats })
 
+        // Mine's chorus repeats every 16 beats across 5 chords: C(4) G(4) D(4) Em(2) D(2).
         val mine = SongChart.decode(File(chartsDir, "mine.json").readText())
-        assertEquals(listOf("C", "G", "D", "Em"), mine.practiceProgression().map { it.chord })
+        val mineProg = mine.practiceProgression()
+        assertEquals(listOf("C", "G", "D", "Em", "D"), mineProg.map { it.chord })
+        assertEquals(listOf(4, 4, 4, 2, 2), mineProg.map { it.beats })
     }
 
     @Test
-    fun mergeBundledChartsNeverCreatesDuplicateIdsAfterRename() {
+    fun mergeBundledChartsNeverCreatesDuplicateIdsOrHijacksDifferentArtist() {
         val charts = chartsDir.listFiles { f -> f.extension == "json" }!!
             .sortedBy { it.name }
             .map { SongChart.decode(it.readText()) }
@@ -137,6 +140,12 @@ class PlayAlongTest {
         assertEquals(0, pass2.linked)
         // Backup round-trip must accept the merged repertoire cleanly.
         assertEquals(pass2.songs, BackupFormat.decode(BackupFormat.encode(pass2.songs)))
+
+        // A user song with the same title ("Mine") by a different artist must not be hijacked.
+        val otherMine = Song(id = "user-mine", title = "Mine", artist = "Bazzi", level = Level.L2, levelSince = 0, addedAt = 0)
+        val mergedWithOther = mergeBundledCharts(listOf(otherMine), charts, 4_000L)
+        assertNull(mergedWithOther.songs.first { it.id == "user-mine" }.chartId)
+        assertEquals(1 + charts.size, mergedWithOther.songs.size)
     }
 
     @Test

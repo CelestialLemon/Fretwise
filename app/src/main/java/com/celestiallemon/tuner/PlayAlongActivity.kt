@@ -115,6 +115,7 @@ class PlayAlongActivity : ComponentActivity() {
     private var practicedChanged = false
     private var practicedDate: String = ""
     private var linkedVideoUri: String? = null
+    private var clearedVideoLink = false
     private var openChordsOnExit = false
     private var savedPositionMs: Long = 0L
     private var savedSpeed: Float = 1.0f
@@ -144,6 +145,7 @@ class PlayAlongActivity : ComponentActivity() {
         practicedDate = savedInstanceState?.getString(STATE_PRACTICED_DATE)
             ?: intent.getStringExtra(EXTRA_PRACTICED_DATE).orEmpty()
         linkedVideoUri = savedInstanceState?.getString(STATE_LINKED_VIDEO_URI)
+        clearedVideoLink = savedInstanceState?.getBoolean(STATE_CLEARED_VIDEO_LINK) ?: false
         savedPositionMs = savedInstanceState?.getLong(STATE_POSITION_MS, 0L) ?: 0L
         savedSpeed = savedInstanceState?.getFloat(STATE_SPEED, 1.0f) ?: 1.0f
         savedLoopSectionIndex = savedInstanceState?.getInt(STATE_LOOP_SECTION_INDEX, -1) ?: -1
@@ -160,7 +162,11 @@ class PlayAlongActivity : ComponentActivity() {
             chartId = chartId,
             capoLabel = capoLabel,
             keyLabel = keyLabel,
-            videoUri = linkedVideoUri ?: initialVideoUri,
+            videoUri = when {
+                linkedVideoUri != null -> linkedVideoUri!!
+                clearedVideoLink -> ""
+                else -> initialVideoUri
+            },
         )
 
         setContent {
@@ -174,6 +180,9 @@ class PlayAlongActivity : ComponentActivity() {
                             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         videoLibrary.folderUri = uri
+                        linkedVideoUri = null
+                        clearedVideoLink = true
+                        savedPositionMs = 0L
                         resolvedUri = videoLibrary.resolveVideo(placeholderSong.copy(videoUri = ""), chart)
                     }
                 }
@@ -183,6 +192,7 @@ class PlayAlongActivity : ComponentActivity() {
                             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         linkedVideoUri = uri.toString()
+                        clearedVideoLink = false
                         savedPositionMs = 0L
                         resolvedUri = uri
                     }
@@ -207,6 +217,7 @@ class PlayAlongActivity : ComponentActivity() {
                     onTogglePracticed = {
                         practiced = !practiced
                         practicedToday = practiced
+                        practicedDate = java.time.LocalDate.now().toString()
                         practicedChanged = true
                     },
                     onPickFolder = { folderPicker.launch(null) },
@@ -228,6 +239,7 @@ class PlayAlongActivity : ComponentActivity() {
         outState.putBoolean(STATE_PRACTICED_CHANGED, practicedChanged)
         outState.putString(STATE_PRACTICED_DATE, practicedDate)
         linkedVideoUri?.let { outState.putString(STATE_LINKED_VIDEO_URI, it) }
+        outState.putBoolean(STATE_CLEARED_VIDEO_LINK, clearedVideoLink)
         outState.putLong(STATE_POSITION_MS, savedPositionMs)
         outState.putFloat(STATE_SPEED, savedSpeed)
         outState.putInt(STATE_LOOP_SECTION_INDEX, savedLoopSectionIndex)
@@ -252,6 +264,7 @@ class PlayAlongActivity : ComponentActivity() {
                 putExtra(RESULT_PRACTICED_TODAY, practicedToday)
                 putExtra(RESULT_PRACTICED_DATE, practicedDate)
                 linkedVideoUri?.let { putExtra(RESULT_VIDEO_URI, it) }
+                if (clearedVideoLink) putExtra(RESULT_CLEAR_VIDEO_URI, true)
                 putExtra(RESULT_OPEN_CHORDS, openChordsOnExit)
             },
         )
@@ -279,6 +292,7 @@ class PlayAlongActivity : ComponentActivity() {
         private const val STATE_PRACTICED_CHANGED = "state_practiced_changed"
         private const val STATE_PRACTICED_DATE = "state_practiced_date"
         private const val STATE_LINKED_VIDEO_URI = "state_linked_video_uri"
+        private const val STATE_CLEARED_VIDEO_LINK = "state_cleared_video_link"
         private const val STATE_POSITION_MS = "state_position_ms"
         private const val STATE_SPEED = "state_speed"
         private const val STATE_LOOP_SECTION_INDEX = "state_loop_section_index"
@@ -288,6 +302,7 @@ class PlayAlongActivity : ComponentActivity() {
         const val RESULT_PRACTICED_TODAY = "result_practiced_today"
         const val RESULT_PRACTICED_DATE = "result_practiced_date"
         const val RESULT_VIDEO_URI = "result_video_uri"
+        const val RESULT_CLEAR_VIDEO_URI = "result_clear_video_uri"
         const val RESULT_OPEN_CHORDS = "result_open_chords"
 
         fun createIntent(context: Context, song: Song, practicedToday: Boolean, practicedDateIso: String): Intent =

@@ -93,8 +93,11 @@ class MainActivity : ComponentActivity() {
                             val day = runCatching { dateStr?.let(java.time.LocalDate::parse) }.getOrNull() ?: repertoireState.today
                             repertoire.setPracticedOn(songId, day, done)
                         }
-                        data.getStringExtra(PlayAlongActivity.RESULT_VIDEO_URI)?.let { uriStr ->
-                            repertoire.setVideoUri(songId, uriStr.toUri())
+                        val linkedUri = data.getStringExtra(PlayAlongActivity.RESULT_VIDEO_URI)
+                        if (linkedUri != null) {
+                            repertoire.setVideoUri(songId, linkedUri.toUri())
+                        } else if (data.getBooleanExtra(PlayAlongActivity.RESULT_CLEAR_VIDEO_URI, false)) {
+                            repertoire.clearVideoUri(songId)
                         }
                         if (data.getBooleanExtra(PlayAlongActivity.RESULT_OPEN_CHORDS, false)) {
                             tab = Tab.Practice

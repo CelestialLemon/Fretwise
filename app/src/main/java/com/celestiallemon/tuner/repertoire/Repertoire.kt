@@ -178,10 +178,14 @@ fun mergeBundledCharts(existing: List<Song>, charts: List<SongChart>, now: Long)
         }
     }
 
-    // Pass 2: link unlinked songs by title, or append missing charts with unique IDs.
+    // Pass 2: link unlinked songs by title + compatible artist, or append missing charts with unique IDs.
     for ((idx, chart) in charts.withIndex()) {
         if (chart.id in matchedChartIds) continue
-        val titleMatch = updated.indexOfFirst { it.chartId.isNullOrBlank() && it.title.equals(chart.title, ignoreCase = true) }
+        val titleMatch = updated.indexOfFirst {
+            it.chartId.isNullOrBlank() &&
+                it.title.equals(chart.title, ignoreCase = true) &&
+                (it.artist.isBlank() || chart.artist.isBlank() || it.artist.equals(chart.artist, ignoreCase = true))
+        }
         if (titleMatch >= 0) {
             val current = updated[titleMatch]
             updated[titleMatch] = current.copy(

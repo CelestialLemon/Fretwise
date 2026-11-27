@@ -203,16 +203,25 @@ data class SongChart(
         val sectionPlayable = events.subList(anchorIdx, sectionEndIdx)
             .filter { it.c.isNotBlank() && !it.c.equals("N.C.", ignoreCase = true) }
 
-        val window = sectionPlayable.take(8)
-
-        // Trim repeated halves (e.g. [C, G, D, Em, C, G, D, Em] -> [C, G, D, Em]).
-        val trimmed = if (window.size == 8 && window.take(4).map { it.c to it.n } == window.drop(4).map { it.c to it.n }) {
-            window.take(4)
-        } else {
-            window.take(4).ifEmpty { window }
-        }
         val barBeats = timeSignature().beats
-        return trimmed.map { ev ->
+        val targetLoopBeats = barBeats * 4
+
+        // Prefer the shortest repeating phrase (2..8 events) inside the section (e.g. 5-chord 16-beat chorus in Mine).
+        val repeated = (2..minOf(8, sectionPlayable.size / 2)).firstOrNull { len ->
+            val head = sectionPlayable.subList(0, len)
+            val next = sectionPlayable.subList(len, len * 2)
+            head.zip(next).all { (a, b) -> a.c == b.c && a.n == b.n }
+        }?.let { sectionPlayable.take(it) }
+
+        val chosen = repeated ?: buildList {
+            var total = 0.0
+            for (ev in sectionPlayable.take(8)) {
+                add(ev)
+                total += ev.n
+                if (total >= targetLoopBeats) break
+            }
+        }
+        return chosen.map { ev ->
             val beats = ev.n.roundToInt().coerceIn(2, maxOf(barBeats * 2, 8))
             ProgressionStep(ev.c, beats)
         }

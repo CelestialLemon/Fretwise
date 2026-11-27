@@ -44,7 +44,19 @@ class VideoLibrary(private val context: Context) {
         val normalizedTitle = normalize(song.title)
         val normalizedId = chart?.id?.let(::normalize)
 
-        // 2. App external videos directory (fast, no permissions needed, works with `adb push`).
+        // 2. User-picked Storage Access Framework folder (explicitly chosen by the user takes priority over app dir).
+        folderUri?.let { treeUri ->
+            val root = runCatching { DocumentFile.fromTreeUri(context, treeUri) }.getOrNull()
+            if (root != null && root.canRead()) {
+                if (expectedName != null) {
+                    root.findFile(expectedName)?.takeIf { it.isFile }?.let { return it.uri }
+                }
+                val docs = root.listFiles().filter { it.isFile && (it.name?.endsWith(".mp4", ignoreCase = true) == true) }
+                findMatchingDoc(docs, expectedName, normalizedTitle, normalizedId)?.uri?.let { return it }
+            }
+        }
+
+        // 3. App external videos directory (fast, no permissions needed, works with `adb push`).
         appVideosDir()?.takeIf { it.isDirectory }?.let { dir ->
             if (expectedName != null) {
                 val exact = File(dir, expectedName)
@@ -54,15 +66,7 @@ class VideoLibrary(private val context: Context) {
             findMatchingFile(files, expectedName, normalizedTitle, normalizedId)?.let { return Uri.fromFile(it) }
         }
 
-        // 3. User-picked Storage Access Framework folder.
-        val treeUri = folderUri ?: return null
-        val root = runCatching { DocumentFile.fromTreeUri(context, treeUri) }.getOrNull() ?: return null
-        if (!root.canRead()) return null
-        if (expectedName != null) {
-            root.findFile(expectedName)?.takeIf { it.isFile }?.let { return it.uri }
-        }
-        val docs = root.listFiles().filter { it.isFile && (it.name?.endsWith(".mp4", ignoreCase = true) == true) }
-        return findMatchingDoc(docs, expectedName, normalizedTitle, normalizedId)?.uri
+        return null
     }
 
     private fun isReadable(uri: Uri): Boolean = runCatching {

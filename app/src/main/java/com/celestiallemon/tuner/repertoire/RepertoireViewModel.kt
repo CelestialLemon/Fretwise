@@ -108,14 +108,16 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
             val today = LocalDate.now()
             val chartMap = charts.associateBy { it.id }
             val folderName = withContext(Dispatchers.IO) { videoLibrary.folderDisplayName() }
-            _state.value = RepertoireUiState(
-                loaded = true,
-                songs = data.songs,
-                today = today,
-                plan = planDay(today, data.songs, data.today),
-                charts = chartMap,
-                videoFolderName = folderName,
-            )
+            _state.update { current ->
+                current.copy(
+                    loaded = true,
+                    songs = data.songs,
+                    today = today,
+                    plan = planDay(today, data.songs, data.today),
+                    charts = chartMap,
+                    videoFolderName = folderName,
+                )
+            }
             if (seeded) persist()
             if (pendingMutations.isNotEmpty()) {
                 val queued = pendingMutations.toList()
@@ -205,6 +207,10 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    fun clearVideoUri(id: String) = runWhenLoaded {
+        updateSong(id) { it.copy(videoUri = "") }
+    }
+
     fun setVideoFolder(treeUri: Uri) {
         runCatching {
             getApplication<Application>().contentResolver.takePersistableUriPermission(
@@ -245,7 +251,7 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
     fun swap(level: Level, songId: String) =
         update { it.copy(plan = it.plan.copy(picks = it.plan.picks + (level to songId))) }
 
-    fun export(uri: Uri) {
+    fun export(uri: Uri) = runWhenLoaded {
         val songs = _state.value.songs
         viewModelScope.launch {
             val result = runCatching {
