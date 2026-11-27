@@ -218,7 +218,7 @@ data class SongChart(
             for (ev in sectionPlayable.take(8)) {
                 add(ev)
                 total += ev.n
-                if (total >= targetLoopBeats) break
+                if (size >= 4 && total >= targetLoopBeats) break
             }
         }
         return chosen.map { ev ->

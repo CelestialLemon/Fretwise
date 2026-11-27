@@ -108,9 +108,7 @@ fun ChordPracticeScreen(
         mutableStateOf(initialSongId ?: songsWithChords.firstOrNull()?.id)
     }
     val selectedSong = songs.firstOrNull { it.id == selectedSongId }
-    val selectedChart = selectedSong?.let { s ->
-        s.chartId?.let { charts[it] } ?: charts.values.firstOrNull { it.title.equals(s.title, ignoreCase = true) }
-    }
+    val selectedChart = selectedSong?.chartId?.let { charts[it] }
 
     var freeChords by rememberSaveable { mutableStateOf(listOf("C", "G", "D", "Em")) }
     val activeChords = remember(selectedSong, selectedChart, freeChords) {

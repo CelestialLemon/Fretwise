@@ -122,6 +122,12 @@ class PlayAlongTest {
         val mineProg = mine.practiceProgression()
         assertEquals(listOf("C", "G", "D", "Em", "D"), mineProg.map { it.chord })
         assertEquals(listOf(4, 4, 4, 2, 2), mineProg.map { it.beats })
+
+        // Love Story's chorus uses 8-beat chords (C, G, Am, F) and must not stop after 2 chords.
+        val loveStory = SongChart.decode(File(chartsDir, "love_story.json").readText())
+        val loveProg = loveStory.practiceProgression()
+        assertTrue("Love Story progression should include at least 4 chords", loveProg.size >= 4)
+        assertTrue("Love Story progression should include Am and F", "Am" in loveProg.map { it.chord } && "F" in loveProg.map { it.chord })
     }
 
     @Test

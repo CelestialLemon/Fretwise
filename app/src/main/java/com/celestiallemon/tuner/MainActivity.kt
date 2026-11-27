@@ -99,6 +99,7 @@ class MainActivity : ComponentActivity() {
                         } else if (data.getBooleanExtra(PlayAlongActivity.RESULT_CLEAR_VIDEO_URI, false)) {
                             repertoire.clearVideoUri(songId)
                         }
+                        repertoire.refreshVideoFolder()
                         if (data.getBooleanExtra(PlayAlongActivity.RESULT_OPEN_CHORDS, false)) {
                             tab = Tab.Practice
                             practiceRoute = PracticeRoute.Chords(songId)

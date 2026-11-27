@@ -44,24 +44,23 @@ class VideoLibrary(private val context: Context) {
         val normalizedTitle = normalize(song.title)
         val normalizedId = chart?.id?.let(::normalize)
 
-        // 2. User-picked Storage Access Framework folder (explicitly chosen by the user takes priority over app dir).
-        folderUri?.let { treeUri ->
-            val root = runCatching { DocumentFile.fromTreeUri(context, treeUri) }.getOrNull()
-            if (root != null && root.canRead()) {
-                if (expectedName != null) {
-                    root.findFile(expectedName)?.takeIf { it.isFile }?.let { return it.uri }
-                }
-                val docs = root.listFiles().filter { it.isFile && (it.name?.endsWith(".mp4", ignoreCase = true) == true) }
-                findMatchingDoc(docs, expectedName, normalizedTitle, normalizedId)?.uri?.let { return it }
-            }
+        val safRoot = folderUri?.let { treeUri ->
+            runCatching { DocumentFile.fromTreeUri(context, treeUri) }.getOrNull()?.takeIf { it.canRead() }
+        }
+        val appDir = appVideosDir()?.takeIf { it.isDirectory }
+
+        // 2. Exact filename match in user-picked SAF folder first, then app external videos dir.
+        if (expectedName != null) {
+            safRoot?.findFile(expectedName)?.takeIf { it.isFile }?.let { return it.uri }
+            appDir?.let { File(it, expectedName) }?.takeIf { it.isFile }?.let { return Uri.fromFile(it) }
         }
 
-        // 3. App external videos directory (fast, no permissions needed, works with `adb push`).
-        appVideosDir()?.takeIf { it.isDirectory }?.let { dir ->
-            if (expectedName != null) {
-                val exact = File(dir, expectedName)
-                if (exact.isFile) return Uri.fromFile(exact)
-            }
+        // 3. Fallback substring match (SAF folder first, then app dir) when no exact filename exists.
+        safRoot?.let { root ->
+            val docs = root.listFiles().filter { it.isFile && (it.name?.endsWith(".mp4", ignoreCase = true) == true) }
+            findMatchingDoc(docs, expectedName, normalizedTitle, normalizedId)?.uri?.let { return it }
+        }
+        appDir?.let { dir ->
             val files = dir.listFiles().orEmpty().filter { it.isFile && it.name.endsWith(".mp4", ignoreCase = true) }
             findMatchingFile(files, expectedName, normalizedTitle, normalizedId)?.let { return Uri.fromFile(it) }
         }

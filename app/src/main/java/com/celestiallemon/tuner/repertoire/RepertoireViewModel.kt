@@ -40,9 +40,7 @@ data class RepertoireUiState(
 ) {
     fun song(id: String?) = songs.firstOrNull { it.id == id }
 
-    fun chartFor(song: Song): SongChart? =
-        song.chartId?.let { charts[it] }
-            ?: charts.values.firstOrNull { it.title.equals(song.title, ignoreCase = true) }
+    fun chartFor(song: Song): SongChart? = song.chartId?.let { charts[it] }
 
     /** Today's songs in level order, with whether each is done. */
     val todaySongs: List<Pair<Level, Song>>
@@ -224,6 +222,14 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         _messages.trySend(Message(if (name != null) "Video folder set to “$name”" else "Video folder updated"))
     }
 
+    /** Refreshes the displayed video folder name after it may have been changed in [PlayAlongActivity]. */
+    fun refreshVideoFolder() {
+        viewModelScope.launch {
+            val name = withContext(Dispatchers.IO) { videoLibrary.folderDisplayName() }
+            _state.update { it.copy(videoFolderName = name) }
+        }
+    }
+
     /**
      * Merges all bundled play-along charts into the repertoire: links matching existing songs to their
      * chart metadata, and adds any missing songs to L1.
@@ -283,8 +289,8 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun confirmImport() {
-        val songs = _state.value.pendingImport ?: return
+    fun confirmImport() = runWhenLoaded {
+        val songs = _state.value.pendingImport ?: return@runWhenLoaded
         update { it.copy(songs = songs, pendingImport = null, plan = DayPlan(it.today.toString(), emptyMap())) }
         _messages.trySend(Message("Restored ${songs.size} ${plural(songs.size)}"))
     }

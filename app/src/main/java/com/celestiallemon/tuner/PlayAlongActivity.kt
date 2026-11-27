@@ -215,9 +215,15 @@ class PlayAlongActivity : ComponentActivity() {
                         savedLoopSectionIndex = loopIdx
                     },
                     onTogglePracticed = {
-                        practiced = !practiced
+                        val todayIso = java.time.LocalDate.now().toString()
+                        if (practicedDate.isNotBlank() && practicedDate != todayIso) {
+                            // Crossed midnight: start fresh for the new day instead of flipping yesterday's state.
+                            practiced = true
+                        } else {
+                            practiced = !practiced
+                        }
                         practicedToday = practiced
-                        practicedDate = java.time.LocalDate.now().toString()
+                        practicedDate = todayIso
                         practicedChanged = true
                     },
                     onPickFolder = { folderPicker.launch(null) },
