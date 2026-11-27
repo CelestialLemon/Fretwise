@@ -1,12 +1,13 @@
 # Fretwise
 
-A guitar practice app for Android: a tuner that detects which string you're playing, a metronome, and a
-repertoire that plans one song from each learning level every day.
+A guitar practice app for Android with a two-tab flow — **Tuner** → **Practice** — combining a pitch-detecting tuner,
+daily repertoire planning, song-aware chord drills, a metronome, and landscape play-along video guides.
 
 <p>
-  <img src="docs/screenshots/2-flat.png" width="240" alt="Tuning the A string, 38 cents flat">
-  <img src="docs/screenshots/9-metronome.png" width="240" alt="Metronome at 92 BPM in 6/8">
-  <img src="docs/screenshots/10-repertoire.png" width="240" alt="Repertoire with today's practice set">
+  <img src="docs/screenshots/2-flat.png" width="220" alt="Tuning the A string, 38 cents flat">
+  <img src="docs/screenshots/10-repertoire.png" width="220" alt="Practice tab with today's set and quick tools">
+  <img src="docs/screenshots/12-chords.png" width="220" alt="Song-aware chord practice and strumming drill">
+  <img src="docs/screenshots/9-metronome.png" width="220" alt="Metronome at 92 BPM in 6/8">
 </p>
 
 ## Tuner
@@ -22,13 +23,11 @@ with an accented downbeat. Clicks are mixed into one continuous PCM stream, so t
 lights follow the audio playhead. It keeps playing on the Repertoire tab, and stops on the Tuner tab (the clicks would
 confuse pitch detection) or when the app leaves the screen. See `metronome/`.
 
-## Repertoire
+## Practice (Repertoire, Chords & Play-Along)
 
-Songs move through four levels by hand: **L1** (just picked up) → **L2** → **L3** → **Memory**. L1–L3 have soft caps
-(3/3/4) that show a warning but never block. Each day the app picks the least recently practiced song from every level;
-tick them off or swap one for another song in its level. Songs open on YouTube (saved link, or a search) and can load
-their tempo into the metronome. Data lives in `files/repertoire.json` (covered by Android backup), and ⋮ → Export/Import
-writes or restores a JSON backup file. See `repertoire/`.
+- **Repertoire:** Songs move through four levels by hand: **L1** (just picked up) → **L2** → **L3** → **Memory**. L1–L3 have soft caps (3/3/4) that warn without blocking. Each day the app picks the least recently practiced song from every level; tick them off or swap one for another song in its level. Bundled play-along song charts live in `app/src/main/assets/charts/` and seed automatically on first launch (or via `⋮ → Sync play-along songs`). Data lives in `files/repertoire.json` with `⋮ → Export/Import` JSON backups. See `repertoire/` and `playalong/`.
+- **Chord Practice:** Open from any song (or Quick Tools) for fretboard diagrams, metronome-paced progression and 2-chord transition drills with beat-synced strumming arrows, a 1-minute chord-change timer, and one-tap handoff to the song's play-along video. See `ui/ChordPracticeScreen.kt`.
+- **Play-Along Video Player:** Full-screen landscape Media3 player with capo reminder, pitch-preserved speed control (`0.5×`–`1.0×`), section jumper chips, section looping, and direct "Practiced today" marking. Push videos to the phone with `./scripts/push_videos.sh` or pick your phone's video folder once via `⋮ → Video folder`. See `PlayAlongActivity.kt`.
 
 ## Design
 

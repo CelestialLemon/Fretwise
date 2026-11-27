@@ -1,9 +1,13 @@
 package com.celestiallemon.tuner.repertoire
 
 import android.app.Application
+import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.celestiallemon.tuner.playalong.ChartRepository
+import com.celestiallemon.tuner.playalong.SongChart
+import com.celestiallemon.tuner.playalong.VideoLibrary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -29,8 +33,14 @@ data class RepertoireUiState(
     val plan: DayPlan = DayPlan(LocalDate.now().toString(), emptyMap()),
     /** A parsed backup waiting for the user to confirm it should replace everything. */
     val pendingImport: List<Song>? = null,
+    /** Bundled play-along charts indexed by [SongChart.id]. */
+    val charts: Map<String, SongChart> = emptyMap(),
+    /** Display name of the user's selected video folder, if any. */
+    val videoFolderName: String? = null,
 ) {
     fun song(id: String?) = songs.firstOrNull { it.id == id }
+
+    fun chartFor(song: Song): SongChart? = song.chartId?.let { charts[it] }
 
     /** Today's songs in level order, with whether each is done. */
     val todaySongs: List<Pair<Level, Song>>
@@ -50,10 +60,13 @@ data class SongDraft(
 
 class RepertoireViewModel(application: Application) : AndroidViewModel(application) {
     private val file = File(application.filesDir, "repertoire.json")
+    val videoLibrary = VideoLibrary(application)
 
     /** Set when an unreadable save file couldn't be moved aside; saving would destroy it, so it's off. */
     @Volatile private var saveBlocked = false
     private val writeLock = Mutex()
+    /** Mutations that arrived before initial disk load completed (e.g. restored activity results). */
+    private val pendingMutations = mutableListOf<() -> Unit>()
 
     private val _state = MutableStateFlow(RepertoireUiState())
     val state: StateFlow<RepertoireUiState> = _state.asStateFlow()
@@ -66,8 +79,10 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
 
     init {
         viewModelScope.launch {
-            val data = withContext(Dispatchers.IO) {
-                try {
+            val (data, charts, seeded) = withContext(Dispatchers.IO) {
+                val bundled = ChartRepository.loadBundled(application)
+                val existed = file.exists()
+                val loaded = try {
                     load()
                 } catch (e: Exception) {
                     // Move the unreadable file aside (a rename needs no free space) so no save overwrites it.
@@ -80,14 +95,33 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                     }
                     RepertoireData()
                 }
+                if (!existed && loaded.songs.isEmpty() && bundled.isNotEmpty()) {
+                    val base = System.currentTimeMillis()
+                    val seedSongs = bundled.mapIndexed { idx, chart -> chartToSong(chart, base + idx) }
+                    Triple(RepertoireData(songs = seedSongs), bundled, true)
+                } else {
+                    Triple(loaded, bundled, false)
+                }
             }
             val today = LocalDate.now()
-            _state.value = RepertoireUiState(
-                loaded = true,
-                songs = data.songs,
-                today = today,
-                plan = planDay(today, data.songs, data.today),
-            )
+            val chartMap = charts.associateBy { it.id }
+            val folderName = withContext(Dispatchers.IO) { videoLibrary.folderDisplayName() }
+            _state.update { current ->
+                current.copy(
+                    loaded = true,
+                    songs = data.songs,
+                    today = today,
+                    plan = planDay(today, data.songs, data.today),
+                    charts = chartMap,
+                    videoFolderName = folderName,
+                )
+            }
+            if (seeded) persist()
+            if (pendingMutations.isNotEmpty()) {
+                val queued = pendingMutations.toList()
+                pendingMutations.clear()
+                queued.forEach { it() }
+            }
             // Roll over to a fresh practice set at midnight even if the app stays open.
             while (true) {
                 val untilMidnight = Duration.between(LocalDateTime.now(), LocalDate.now().plusDays(1).atStartOfDay())
@@ -150,16 +184,80 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         )
     }
 
-    fun toggleDone(id: String) {
+    fun toggleDone(id: String) = runWhenLoaded {
         val today = _state.value.today
         updateSong(id) { it.togglePracticed(today) }
+    }
+
+    fun setPracticedOn(id: String, day: LocalDate, done: Boolean) = runWhenLoaded {
+        updateSong(id) { it.withPracticed(day, done) }
+    }
+
+    fun setVideoUri(id: String, uri: Uri) {
+        runCatching {
+            getApplication<Application>().contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            )
+        }
+        runWhenLoaded {
+            updateSong(id) { it.copy(videoUri = uri.toString()) }
+        }
+    }
+
+    fun clearVideoUri(id: String) = runWhenLoaded {
+        updateSong(id) { it.copy(videoUri = "") }
+    }
+
+    fun setVideoFolder(treeUri: Uri) {
+        runCatching {
+            getApplication<Application>().contentResolver.takePersistableUriPermission(
+                treeUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            )
+        }
+        videoLibrary.folderUri = treeUri
+        val name = videoLibrary.folderDisplayName()
+        _state.update { it.copy(videoFolderName = name) }
+        _messages.trySend(Message(if (name != null) "Video folder set to “$name”" else "Video folder updated"))
+    }
+
+    /** Refreshes the displayed video folder name after it may have been changed in [PlayAlongActivity]. */
+    fun refreshVideoFolder() {
+        viewModelScope.launch {
+            val name = withContext(Dispatchers.IO) { videoLibrary.folderDisplayName() }
+            _state.update { it.copy(videoFolderName = name) }
+        }
+    }
+
+    /**
+     * Merges all bundled play-along charts into the repertoire: links matching existing songs to their
+     * chart metadata, and adds any missing songs to L1.
+     */
+    fun importBundledCharts() = runWhenLoaded {
+        val charts = _state.value.charts.values.sortedBy { it.outputFilename.ifBlank { it.title } }
+        if (charts.isEmpty()) {
+            _messages.trySend(Message("No bundled play-along songs found"))
+            return@runWhenLoaded
+        }
+        val merged = mergeBundledCharts(_state.value.songs, charts, System.currentTimeMillis())
+        if (merged.added > 0 || merged.linked > 0) {
+            update { it.copy(songs = merged.songs) }
+        }
+        val msg = when {
+            merged.added > 0 && merged.linked > 0 -> "Added ${merged.added} and linked ${merged.linked} play-along ${plural(merged.added + merged.linked)}"
+            merged.added > 0 -> "Added ${merged.added} play-along ${plural(merged.added)}"
+            merged.linked > 0 -> "Linked ${merged.linked} ${plural(merged.linked)} to play-along guides"
+            else -> "All ${charts.size} play-along songs are already in your practice list"
+        }
+        _messages.trySend(Message(msg))
     }
 
     /** Puts [songId] in today's slot for its level. */
     fun swap(level: Level, songId: String) =
         update { it.copy(plan = it.plan.copy(picks = it.plan.picks + (level to songId))) }
 
-    fun export(uri: Uri) {
+    fun export(uri: Uri) = runWhenLoaded {
         val songs = _state.value.songs
         viewModelScope.launch {
             val result = runCatching {
@@ -191,19 +289,28 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun confirmImport() {
-        val songs = _state.value.pendingImport ?: return
+    fun confirmImport() = runWhenLoaded {
+        val songs = _state.value.pendingImport ?: return@runWhenLoaded
         update { it.copy(songs = songs, pendingImport = null, plan = DayPlan(it.today.toString(), emptyMap())) }
         _messages.trySend(Message("Restored ${songs.size} ${plural(songs.size)}"))
     }
 
     fun cancelImport() = _state.update { it.copy(pendingImport = null) }
 
-    private fun updateSong(id: String, change: (Song) -> Song) =
+    private fun runWhenLoaded(op: () -> Unit) {
+        if (_state.value.loaded) op() else pendingMutations += op
+    }
+
+    private fun updateSong(id: String, change: (Song) -> Song) {
+        val current = _state.value.song(id) ?: return
+        val next = change(current)
+        if (next == current) return
         update { s -> s.copy(songs = s.songs.map { if (it.id == id) change(it) else it }) }
+    }
 
     /** Applies [change], re-plans the day so the practice set stays valid, and saves. */
     private fun update(change: (RepertoireUiState) -> RepertoireUiState) {
+        if (!_state.value.loaded) return
         _state.update { old ->
             val new = change(old)
             new.copy(plan = planDay(new.today, new.songs, new.plan))
@@ -216,8 +323,8 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
             writeLock.withLock {
                 // Read the state inside the lock so the last write always holds the newest data.
                 val snapshot = _state.value
+                if (!snapshot.loaded || saveBlocked) return@withLock
                 val data = RepertoireData(songs = snapshot.songs, today = snapshot.plan)
-                if (saveBlocked) return@withLock
                 try {
                     writeAtomically(BackupFormat.json.encodeToString(RepertoireData.serializer(), data).toByteArray())
                 } catch (e: Exception) {
@@ -250,6 +357,21 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         val data = BackupFormat.json.decodeFromString(RepertoireData.serializer(), file.readBytes().decodeToString())
         return data.copy(songs = data.songs.map(BackupFormat::normalized))
     }
+
+    private fun chartToSong(chart: SongChart, timestamp: Long): Song = Song(
+        id = "chart-${chart.id}",
+        title = chart.title,
+        artist = chart.artist,
+        bpm = chart.roundedBpm,
+        level = Level.L1,
+        levelSince = timestamp,
+        addedAt = timestamp,
+        chartId = chart.id,
+        capoLabel = chart.capoLabel,
+        keyLabel = chart.keyLabel,
+        timeSig = chart.timeSig,
+        chords = chart.uniqueChords(),
+    )
 
     private fun plural(n: Int) = if (n == 1) "song" else "songs"
 }

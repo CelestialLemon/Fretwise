@@ -1,0 +1,1031 @@
+{
+  "id": "chahun",
+  "title": "Chahun Main Ya Naa",
+  "artist": "Arijit Singh & Palak Muchhal",
+  "keyLabel": "Key of Am",
+  "capoLabel": "No capo",
+  "bpm": 107.006,
+  "bar1StartSec": 0.1051,
+  "timeSig": "4/4",
+  "ppb": 90,
+  "durationSec": 301.5,
+  "videoPath": "raw/chahun.mp4",
+  "videoLayout": "widescreen",
+  "videoShiftY": 130,
+  "outputFilename": "06 - Arijit Singh & Palak Muchhal - Chahun Main Ya Naa (Play-Along).mp4",
+  "events": [
+    {
+      "c": "Am",
+      "b": 0,
+      "n": 4,
+      "section": "Intro",
+      "strum": "soft4"
+    },
+    {
+      "c": "Am",
+      "b": 4,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "F",
+      "b": 8,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 12,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "Am",
+      "b": 16,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 20,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 24,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 28,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 32,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 36,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 40,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 44,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 48,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 50,
+      "n": 2
+    },
+    {
+      "c": "Dm",
+      "b": 52,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 56,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 60,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 64,
+      "n": 4,
+      "section": "Chorus"
+    },
+    {
+      "c": "G",
+      "b": 68,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 72,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 76,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 80,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 84,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 88,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 92,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 96,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 100,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 104,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 108,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 112,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 116,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 120,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 124,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 128,
+      "n": 2,
+      "section": "Verse 1"
+    },
+    {
+      "c": "G",
+      "b": 130,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 132,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 134,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 136,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 140,
+      "n": 2
+    },
+    {
+      "c": "E",
+      "b": 142,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 144,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 146,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 148,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 150,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 152,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 156,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 160,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 164,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 168,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 172,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 176,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 180,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 184,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 188,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 192,
+      "n": 4,
+      "section": "Interlude"
+    },
+    {
+      "c": "Am",
+      "b": 196,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 200,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 204,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 208,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 212,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 216,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 218,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 220,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 224,
+      "n": 4,
+      "section": "Verse 2"
+    },
+    {
+      "c": "Dm",
+      "b": 228,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 230,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 232,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 236,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 240,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 244,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 248,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 252,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 256,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 260,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 264,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 268,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 272,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 276,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 280,
+      "n": 4
+    },
+    {
+      "c": "E",
+      "b": 284,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 288,
+      "n": 4,
+      "section": "Interlude"
+    },
+    {
+      "c": "F",
+      "b": 292,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 296,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 300,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 304,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 308,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 312,
+      "n": 4
+    },
+    {
+      "c": "Dm",
+      "b": 316,
+      "n": 4
+    },
+    {
+      "c": "E",
+      "b": 320,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 324,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 328,
+      "n": 4
+    },
+    {
+      "c": "Dm",
+      "b": 332,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 334,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 336,
+      "n": 2
+    },
+    {
+      "c": "E",
+      "b": 338,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 340,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 344,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 348,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 352,
+      "n": 4,
+      "section": "Verse 3"
+    },
+    {
+      "c": "Em",
+      "b": 356,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 358,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 360,
+      "n": 4
+    },
+    {
+      "c": "Dm",
+      "b": 364,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 368,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 372,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 376,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 380,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 384,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 388,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 392,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 394,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 396,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 400,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 404,
+      "n": 2
+    },
+    {
+      "c": "Dm",
+      "b": 406,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 408,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 410,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 412,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 414,
+      "n": 2
+    },
+    {
+      "c": "E",
+      "b": 416,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 420,
+      "n": 2,
+      "section": "Bridge"
+    },
+    {
+      "c": "G",
+      "b": 422,
+      "n": 2
+    },
+    {
+      "c": "Dm",
+      "b": 424,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 426,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 428,
+      "n": 4
+    },
+    {
+      "c": "E",
+      "b": 432,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 436,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 440,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 444,
+      "n": 4
+    },
+    {
+      "c": "Dm",
+      "b": 448,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 450,
+      "n": 2
+    },
+    {
+      "c": "E",
+      "b": 452,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 454,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 456,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 460,
+      "n": 4
+    },
+    {
+      "c": "Dm",
+      "b": 464,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 466,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 468,
+      "n": 2
+    },
+    {
+      "c": "Em",
+      "b": 470,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 472,
+      "n": 4,
+      "section": "Final Chorus"
+    },
+    {
+      "c": "C",
+      "b": 476,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 478,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 480,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 482,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 484,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 488,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 492,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 494,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 496,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 498,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 500,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 504,
+      "n": 4,
+      "section": "Outro",
+      "strum": "soft4"
+    },
+    {
+      "c": "Em",
+      "b": 508,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 512,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "F",
+      "b": 516,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "E",
+      "b": 520,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "Am",
+      "b": 524,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 528,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "F",
+      "b": 532,
+      "n": 4,
+      "strum": "ring"
+    }
+  ],
+  "lyrics": [
+    {
+      "startSec": 0.105,
+      "endSec": 35.991,
+      "text": "Acoustic Guitar Intro",
+      "soft": true
+    },
+    {
+      "startSec": 35.991,
+      "endSec": 40.477,
+      "text": "Tu hi yeh mujhko bata de"
+    },
+    {
+      "startSec": 40.477,
+      "endSec": 44.962,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 44.962,
+      "endSec": 49.448,
+      "text": "Apne tu dil ka pata de"
+    },
+    {
+      "startSec": 49.448,
+      "endSec": 53.934,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 53.934,
+      "endSec": 58.42,
+      "text": "Tu hi yeh mujhko bata de"
+    },
+    {
+      "startSec": 58.42,
+      "endSec": 62.905,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 62.905,
+      "endSec": 67.391,
+      "text": "Apne tu dil ka pata de"
+    },
+    {
+      "startSec": 67.391,
+      "endSec": 71.877,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 71.877,
+      "endSec": 76.363,
+      "text": "Itna bata doon tujhko, chaahat pe apni mujhko"
+    },
+    {
+      "startSec": 76.363,
+      "endSec": 80.848,
+      "text": "Yun toh nahi ikhtiyaar"
+    },
+    {
+      "startSec": 80.848,
+      "endSec": 85.334,
+      "text": "Phir bhi yeh socha dil ne, ab jo laga hoon milne"
+    },
+    {
+      "startSec": 85.334,
+      "endSec": 89.82,
+      "text": "Poochhu tujhe ek baar o…"
+    },
+    {
+      "startSec": 89.82,
+      "endSec": 94.305,
+      "text": "Tu hi yeh mujhko bata de"
+    },
+    {
+      "startSec": 94.305,
+      "endSec": 98.791,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 98.791,
+      "endSec": 103.277,
+      "text": "Apne tu dil ka pata de"
+    },
+    {
+      "startSec": 103.277,
+      "endSec": 107.763,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 107.763,
+      "endSec": 125.706,
+      "text": "Guitar Interlude",
+      "soft": true
+    },
+    {
+      "startSec": 125.706,
+      "endSec": 134.677,
+      "text": "Aisi kabhi pehle huyi naa thi khwaahishein"
+    },
+    {
+      "startSec": 134.677,
+      "endSec": 143.648,
+      "text": "O… kisi se bhi milne ki naa ki thi koshishein"
+    },
+    {
+      "startSec": 143.648,
+      "endSec": 148.134,
+      "text": "Uljhan meri suljha de"
+    },
+    {
+      "startSec": 148.134,
+      "endSec": 152.62,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 152.62,
+      "endSec": 157.106,
+      "text": "Aankhon aankhon mein jataa de"
+    },
+    {
+      "startSec": 157.106,
+      "endSec": 161.591,
+      "text": "Chahun main ya naa"
+    },
+    {
+      "startSec": 161.591,
+      "endSec": 197.477,
+      "text": "Acoustic & Strings Interlude",
+      "soft": true
+    },
+    {
+      "startSec": 197.477,
+      "endSec": 206.449,
+      "text": "Mere chhote chhote khwaab hain, khwabon mein geet hain"
+    },
+    {
+      "startSec": 206.449,
+      "endSec": 215.42,
+      "text": "Geeton mein zindagi hain, chaahat hain preet hain"
+    },
+    {
+      "startSec": 215.42,
+      "endSec": 224.392,
+      "text": "Abhi main na dekhoon khwaab woh jin mein na tu mile"
+    },
+    {
+      "startSec": 224.392,
+      "endSec": 235.606,
+      "text": "Le khole honth maine ab tak the jo sile"
+    },
+    {
+      "startSec": 235.606,
+      "endSec": 244.577,
+      "text": "Mujhko na jitna mujh pe, utna iss dil ko tujh pe"
+    },
+    {
+      "startSec": 244.577,
+      "endSec": 249.063,
+      "text": "Hone laga aitbaar"
+    },
+    {
+      "startSec": 249.063,
+      "endSec": 258.035,
+      "text": "Tanha lamhon mein apne bunti hoon tere sapne"
+    },
+    {
+      "startSec": 258.035,
+      "endSec": 264.763,
+      "text": "Tujhse hua mujhko pyaar o…"
+    },
+    {
+      "startSec": 264.763,
+      "endSec": 269.249,
+      "text": "Poochungi tujhko kabhi naa — Chahun main ya naa"
+    },
+    {
+      "startSec": 269.249,
+      "endSec": 273.735,
+      "text": "Tere khwaabon mein ab jeena — Chahun main kyun naa"
+    },
+    {
+      "startSec": 273.735,
+      "endSec": 278.22,
+      "text": "Tu hi yeh mujhko bata de — Chahun main ya naa"
+    },
+    {
+      "startSec": 278.22,
+      "endSec": 282.706,
+      "text": "Apne tu dil ka pata de — Chahun main ya naa"
+    },
+    {
+      "startSec": 282.706,
+      "endSec": 300.649,
+      "text": "Acoustic Outro",
+      "soft": true
+    }
+  ]
+}

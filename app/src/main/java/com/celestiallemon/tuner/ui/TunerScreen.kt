@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material3.Icon
@@ -52,6 +53,7 @@ fun TunerScreen(
     onA4Change: (Double) -> Unit,
     onLockString: (Int?) -> Unit,
     modifier: Modifier = Modifier,
+    onStartPractice: (() -> Unit)? = null,
 ) {
     val reading = state.reading
     val strings = state.tuning.strings
@@ -126,7 +128,13 @@ fun TunerScreen(
                 onPegClick = { index -> onLockString(if (!state.auto && reading.stringIndex == index) null else index) },
                 modifier = Modifier.fillMaxWidth().weight(1f).padding(top = 20.dp),
             )
-            ModeBar(auto = state.auto, tunedCount = reading.tuned.size, total = strings.size, onAuto = { onLockString(null) })
+            ModeBar(
+                auto = state.auto,
+                tunedCount = reading.tuned.size,
+                total = strings.size,
+                onAuto = { onLockString(null) },
+                onStartPractice = onStartPractice,
+            )
         }
         state.error?.let {
             Text(
@@ -202,7 +210,13 @@ private fun TopBar(state: TunerUiState, onClick: () -> Unit) {
 }
 
 @Composable
-private fun ModeBar(auto: Boolean, tunedCount: Int, total: Int, onAuto: () -> Unit) {
+private fun ModeBar(
+    auto: Boolean,
+    tunedCount: Int,
+    total: Int,
+    onAuto: () -> Unit,
+    onStartPractice: (() -> Unit)? = null,
+) {
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -231,11 +245,27 @@ private fun ModeBar(auto: Boolean, tunedCount: Int, total: Int, onAuto: () -> Un
             )
         }
         Spacer(Modifier.weight(1f))
-        Text(
-            "$tunedCount of $total tuned",
-            color = if (tunedCount == total) Palette.InTune else Palette.Faint,
-            fontSize = 13.sp,
-        )
+        if (tunedCount == total && onStartPractice != null) {
+            Row(
+                Modifier
+                    .clip(CircleShape)
+                    .background(Palette.InTune.copy(alpha = 0.18f))
+                    .border(1.dp, Palette.InTune.copy(alpha = 0.65f), CircleShape)
+                    .clickable(role = Role.Button, onClick = onStartPractice)
+                    .padding(horizontal = 12.dp, vertical = 7.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text("Practice", color = Palette.InTune, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+                Spacer(Modifier.width(4.dp))
+                Icon(Icons.AutoMirrored.Rounded.ArrowForward, null, tint = Palette.InTune, modifier = Modifier.size(15.dp))
+            }
+        } else {
+            Text(
+                "$tunedCount of $total tuned",
+                color = if (tunedCount == total) Palette.InTune else Palette.Faint,
+                fontSize = 13.sp,
+            )
+        }
     }
     Spacer(Modifier.height(4.dp))
 }

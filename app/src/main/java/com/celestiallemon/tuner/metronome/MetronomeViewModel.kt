@@ -105,8 +105,11 @@ class MetronomeViewModel(application: Application) : AndroidViewModel(applicatio
         tapTempo.tap(timeMs)?.let(::setBpm)
     }
 
-    /** Loads a song's tempo without starting playback. */
-    fun loadSong(title: String, bpm: Int) = applyBpm(bpm, songTitle = title)
+    /** Loads a song's tempo (and optional time signature) without starting playback. */
+    fun loadSong(title: String, bpm: Int, signature: TimeSignature? = null) {
+        if (signature != null) setSignature(signature)
+        applyBpm(bpm, songTitle = title)
+    }
 
     fun setSignature(signature: TimeSignature) {
         engine.signature = signature

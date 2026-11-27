@@ -1,0 +1,1074 @@
+{
+  "id": "one_thing",
+  "title": "One Thing",
+  "artist": "One Direction",
+  "keyLabel": "Key of D (C shapes)",
+  "capoLabel": "Capo 2",
+  "bpm": 126.998,
+  "bar1StartSec": 0.1673,
+  "timeSig": "4/4",
+  "ppb": 96,
+  "durationSec": 194.5,
+  "videoPath": "raw/one_thing.mp4",
+  "videoLayout": "widescreen",
+  "videoShiftY": 140,
+  "outputFilename": "05 - One Direction - One Thing (Play-Along).mp4",
+  "events": [
+    {
+      "c": "C",
+      "b": 0,
+      "n": 2,
+      "section": "Intro",
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 2,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 4,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 8,
+      "n": 2,
+      "section": "Verse 1"
+    },
+    {
+      "c": "G",
+      "b": 10,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 12,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 16,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 18,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 20,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 24,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 26,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 28,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 32,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 36,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 38,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 40,
+      "n": 2,
+      "section": "Verse 1"
+    },
+    {
+      "c": "G",
+      "b": 42,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 44,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 48,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 50,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 52,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 56,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 58,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 60,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 64,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 68,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 70,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 72,
+      "n": 4,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "C",
+      "b": 76,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 80,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 84,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 88,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 92,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 96,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 100,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "C",
+      "b": 104,
+      "n": 2,
+      "section": "Chorus"
+    },
+    {
+      "c": "F",
+      "b": 106,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 108,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 110,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 112,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 114,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 116,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 118,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 120,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 122,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 124,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 126,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 128,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 132,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 134,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 136,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 140,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 142,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 144,
+      "n": 2,
+      "section": "Interlude",
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 146,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 148,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 152,
+      "n": 2,
+      "section": "Verse 2"
+    },
+    {
+      "c": "G",
+      "b": 154,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 156,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 160,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 162,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 164,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 168,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 170,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 172,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 176,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 180,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 182,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 184,
+      "n": 4,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "C",
+      "b": 188,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 192,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 196,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 200,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 204,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 208,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 212,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "C",
+      "b": 216,
+      "n": 2,
+      "section": "Chorus"
+    },
+    {
+      "c": "F",
+      "b": 218,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 220,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 222,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 224,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 226,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 228,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 230,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 232,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 234,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 236,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 238,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 240,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 244,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 246,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 248,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 250,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 252,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 254,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 256,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 258,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 260,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 262,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 264,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 266,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 268,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 270,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 272,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 276,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 278,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 280,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 284,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 286,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 288,
+      "n": 4,
+      "section": "Bridge"
+    },
+    {
+      "c": "Am",
+      "b": 292,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 296,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 300,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 304,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 308,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 312,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 316,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 320,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "F",
+      "b": 322,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 324,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 326,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "Am",
+      "b": 328,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "F",
+      "b": 330,
+      "n": 2,
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 332,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "C",
+      "b": 336,
+      "n": 2,
+      "section": "Final Chorus"
+    },
+    {
+      "c": "F",
+      "b": 338,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 340,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 342,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 344,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 346,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 348,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 350,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 352,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 354,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 356,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 358,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 360,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 364,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 366,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 368,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 370,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 372,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 374,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 376,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 378,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 380,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 382,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 384,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 386,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 388,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 390,
+      "n": 2
+    },
+    {
+      "c": "F",
+      "b": 392,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 396,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 398,
+      "n": 2
+    },
+    {
+      "c": "Am",
+      "b": 400,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 404,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 406,
+      "n": 2,
+      "strum": "ring"
+    }
+  ],
+  "lyrics": [
+    {
+      "startSec": 0.167,
+      "endSec": 3.947,
+      "text": "Acoustic Intro",
+      "soft": true
+    },
+    {
+      "startSec": 3.947,
+      "endSec": 7.726,
+      "text": "I’ve tried playing it cool"
+    },
+    {
+      "startSec": 7.726,
+      "endSec": 11.506,
+      "text": "But when I’m looking at you"
+    },
+    {
+      "startSec": 11.506,
+      "endSec": 15.286,
+      "text": "I can’t ever be brave"
+    },
+    {
+      "startSec": 15.286,
+      "endSec": 19.065,
+      "text": "’Cause you make my heart race"
+    },
+    {
+      "startSec": 19.065,
+      "endSec": 22.845,
+      "text": "Shot me out of the sky"
+    },
+    {
+      "startSec": 22.845,
+      "endSec": 26.624,
+      "text": "You’re my Kryptonite"
+    },
+    {
+      "startSec": 26.624,
+      "endSec": 30.404,
+      "text": "You keep making me weak"
+    },
+    {
+      "startSec": 30.404,
+      "endSec": 34.184,
+      "text": "Yeah, frozen and can’t breathe"
+    },
+    {
+      "startSec": 34.184,
+      "endSec": 37.963,
+      "text": "Something’s gotta give now"
+    },
+    {
+      "startSec": 37.963,
+      "endSec": 41.743,
+      "text": "’Cause I’m dying just to make you see"
+    },
+    {
+      "startSec": 41.743,
+      "endSec": 45.522,
+      "text": "That I need you here with me now"
+    },
+    {
+      "startSec": 45.522,
+      "endSec": 49.302,
+      "text": "’Cause you’ve got that one thing"
+    },
+    {
+      "startSec": 49.302,
+      "endSec": 53.082,
+      "text": "So get out, get out, get out of my head"
+    },
+    {
+      "startSec": 53.082,
+      "endSec": 56.861,
+      "text": "And fall into my arms instead"
+    },
+    {
+      "startSec": 56.861,
+      "endSec": 60.641,
+      "text": "I don’t, I don’t, don’t know what it is"
+    },
+    {
+      "startSec": 60.641,
+      "endSec": 64.42,
+      "text": "But I need that one thing"
+    },
+    {
+      "startSec": 64.42,
+      "endSec": 68.2,
+      "text": "And you’ve got that one thing"
+    },
+    {
+      "startSec": 71.979,
+      "endSec": 75.759,
+      "text": "Now I’m climbing the walls"
+    },
+    {
+      "startSec": 75.759,
+      "endSec": 79.539,
+      "text": "But you don’t notice at all"
+    },
+    {
+      "startSec": 79.539,
+      "endSec": 83.318,
+      "text": "That I’m going out of my mind"
+    },
+    {
+      "startSec": 83.318,
+      "endSec": 87.098,
+      "text": "All day and all night"
+    },
+    {
+      "startSec": 87.098,
+      "endSec": 90.877,
+      "text": "Something’s gotta give now"
+    },
+    {
+      "startSec": 90.877,
+      "endSec": 94.657,
+      "text": "’Cause I’m dying just to know your name"
+    },
+    {
+      "startSec": 94.657,
+      "endSec": 98.437,
+      "text": "And I need you here with me now"
+    },
+    {
+      "startSec": 98.437,
+      "endSec": 102.216,
+      "text": "’Cause you’ve got that one thing"
+    },
+    {
+      "startSec": 102.216,
+      "endSec": 105.996,
+      "text": "So get out, get out, get out of my head"
+    },
+    {
+      "startSec": 105.996,
+      "endSec": 109.775,
+      "text": "And fall into my arms instead"
+    },
+    {
+      "startSec": 109.775,
+      "endSec": 113.555,
+      "text": "I don’t, I don’t, don’t know what it is"
+    },
+    {
+      "startSec": 113.555,
+      "endSec": 117.334,
+      "text": "But I need that one thing"
+    },
+    {
+      "startSec": 117.334,
+      "endSec": 121.114,
+      "text": "So get out, get out, get out of my mind"
+    },
+    {
+      "startSec": 121.114,
+      "endSec": 124.894,
+      "text": "And come on, come into my life"
+    },
+    {
+      "startSec": 124.894,
+      "endSec": 128.673,
+      "text": "I don’t, I don’t, don’t know what it is"
+    },
+    {
+      "startSec": 128.673,
+      "endSec": 132.453,
+      "text": "But I need that one thing"
+    },
+    {
+      "startSec": 132.453,
+      "endSec": 136.232,
+      "text": "And you’ve got that one thing"
+    },
+    {
+      "startSec": 136.232,
+      "endSec": 143.792,
+      "text": "Woah-oh-oh-oh",
+      "soft": true
+    },
+    {
+      "startSec": 143.792,
+      "endSec": 151.351,
+      "text": "Woah-oh-oh-oh — You’ve got that one thing"
+    },
+    {
+      "startSec": 151.351,
+      "endSec": 155.13,
+      "text": "Get out, get out, get out of my head"
+    },
+    {
+      "startSec": 155.13,
+      "endSec": 158.91,
+      "text": "And fall into my arms instead"
+    },
+    {
+      "startSec": 158.91,
+      "endSec": 162.69,
+      "text": "So get out, get out, get out of my head"
+    },
+    {
+      "startSec": 162.69,
+      "endSec": 166.469,
+      "text": "And fall into my arms instead"
+    },
+    {
+      "startSec": 166.469,
+      "endSec": 170.249,
+      "text": "I don’t, I don’t, don’t know what it is"
+    },
+    {
+      "startSec": 170.249,
+      "endSec": 174.028,
+      "text": "But I need that one thing"
+    },
+    {
+      "startSec": 174.028,
+      "endSec": 177.808,
+      "text": "So get out, get out, get out of my mind"
+    },
+    {
+      "startSec": 177.808,
+      "endSec": 181.587,
+      "text": "And come on, come into my life"
+    },
+    {
+      "startSec": 181.587,
+      "endSec": 185.367,
+      "text": "I don’t, I don’t, don’t know what it is"
+    },
+    {
+      "startSec": 185.367,
+      "endSec": 189.147,
+      "text": "But I need that one thing"
+    },
+    {
+      "startSec": 189.147,
+      "endSec": 192.926,
+      "text": "Yeah, you’ve got that one thing"
+    }
+  ]
+}
