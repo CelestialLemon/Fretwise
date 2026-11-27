@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -26,9 +27,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.GridView
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -105,6 +108,8 @@ fun SongDetailSheet(
     onDelete: () -> Unit,
     onYouTube: () -> Unit,
     onMetronome: () -> Unit,
+    onChords: () -> Unit = {},
+    onPlayAlong: () -> Unit = {},
 ) {
     FretwiseSheet(onDismiss) { dismiss ->
         Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp)) {
@@ -119,23 +124,94 @@ fun SongDetailSheet(
                 Text(song.artist, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
 
+            val metaParts = listOfNotNull(
+                song.capoLabel.takeIf { it.isNotBlank() },
+                song.keyLabel.takeIf { it.isNotBlank() },
+                song.timeSig.takeIf { it.isNotBlank() },
+            )
+            if (metaParts.isNotEmpty()) {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    metaParts.joinToString(" · "),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Palette.Brass,
+                )
+            }
+
+            if (song.chords.isNotEmpty()) {
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    for (chord in song.chords) {
+                        Box(
+                            Modifier
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                                .padding(horizontal = 10.dp, vertical = 4.dp),
+                        ) {
+                            Text(chord, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurface)
+                        }
+                    }
+                }
+            }
+
             Spacer(Modifier.height(20.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            if (song.hasPlayAlong) {
                 Button(
-                    onClick = onYouTube,
-                    modifier = Modifier.weight(1f).height(52.dp),
+                    onClick = { dismiss(onPlayAlong) },
+                    modifier = Modifier.fillMaxWidth().height(54.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 ) {
-                    Icon(Icons.Rounded.PlayCircle, null, Modifier.size(20.dp))
+                    Icon(Icons.Rounded.PlayCircle, null, Modifier.size(22.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text(if (song.link.isNotBlank()) "Open link" else "YouTube")
+                    Text("Play Along Video")
                 }
-                if (song.bpm != null) {
-                    FilledTonalButton(onClick = onMetronome, modifier = Modifier.weight(1f).height(52.dp)) {
+                Spacer(Modifier.height(10.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    FilledTonalButton(
+                        onClick = { dismiss(onChords) },
+                        modifier = Modifier.weight(1f).height(48.dp),
+                    ) {
+                        Icon(Icons.Rounded.GridView, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text("Chords")
+                    }
+                    FilledTonalButton(
+                        onClick = { dismiss(onMetronome) },
+                        modifier = Modifier.weight(1f).height(48.dp),
+                    ) {
+                        Icon(Icons.Rounded.Metronome, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text(song.bpm?.let { "$it BPM" } ?: "Metronome")
+                    }
+                }
+            } else {
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Button(
+                        onClick = onYouTube,
+                        modifier = Modifier.weight(1f).height(52.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    ) {
+                        Icon(Icons.Rounded.PlayCircle, null, Modifier.size(20.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text(if (song.link.isNotBlank()) "Open link" else "YouTube")
+                    }
+                    FilledTonalButton(onClick = { dismiss(onMetronome) }, modifier = Modifier.weight(1f).height(52.dp)) {
                         Icon(Icons.Rounded.Metronome, null, Modifier.size(20.dp))
                         Spacer(Modifier.width(8.dp))
-                        Text("${song.bpm} BPM")
+                        Text(song.bpm?.let { "$it BPM" } ?: "Metronome")
                     }
+                }
+                Spacer(Modifier.height(10.dp))
+                OutlinedButton(
+                    onClick = { dismiss(onChords) },
+                    modifier = Modifier.fillMaxWidth().height(46.dp),
+                ) {
+                    Icon(Icons.Rounded.GridView, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("Practice chords")
                 }
             }
 
@@ -189,10 +265,19 @@ fun SongDetailSheet(
                     Spacer(Modifier.width(6.dp))
                     Text("Delete")
                 }
-                TextButton(onClick = onEdit) {
-                    Icon(Icons.Rounded.Edit, null, Modifier.size(18.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text("Edit")
+                Row {
+                    if (song.hasPlayAlong) {
+                        TextButton(onClick = onYouTube) {
+                            Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, Modifier.size(16.dp))
+                            Spacer(Modifier.width(4.dp))
+                            Text(if (song.link.isNotBlank()) "Link" else "YouTube")
+                        }
+                    }
+                    TextButton(onClick = onEdit) {
+                        Icon(Icons.Rounded.Edit, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text("Edit")
+                    }
                 }
             }
             Spacer(Modifier.height(8.dp))

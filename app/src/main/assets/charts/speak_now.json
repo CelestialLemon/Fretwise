@@ -1,0 +1,844 @@
+{
+  "id": "speak_now",
+  "title": "Speak Now",
+  "artist": "Taylor Swift",
+  "keyLabel": "Key of G",
+  "capoLabel": "No capo",
+  "bpm": 118.9669,
+  "bar1StartSec": 0.1944,
+  "timeSig": "4/4",
+  "ppb": 96,
+  "durationSec": 238.5,
+  "videoPath": "raw/speak_now.mp4",
+  "videoLayout": "square",
+  "outputFilename": "02 - Taylor Swift - Speak Now (Play-Along).mp4",
+  "events": [
+    {
+      "c": "G",
+      "b": 0,
+      "n": 4,
+      "section": "Intro",
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 4,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 8,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 12,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 16,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 20,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 24,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 28,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 32,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 36,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "G",
+      "b": 40,
+      "n": 4,
+      "section": "Verse 1"
+    },
+    {
+      "c": "D",
+      "b": 44,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 48,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 52,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 56,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 60,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 64,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 68,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 72,
+      "n": 4,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "C",
+      "b": 76,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 80,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 84,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 88,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 92,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 96,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 100,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "G",
+      "b": 104,
+      "n": 4,
+      "section": "Chorus"
+    },
+    {
+      "c": "D",
+      "b": 108,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 112,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 116,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 120,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 124,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 128,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 132,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "G",
+      "b": 136,
+      "n": 4,
+      "section": "Verse 2"
+    },
+    {
+      "c": "D",
+      "b": 140,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 144,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 148,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 152,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 156,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 160,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 164,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 168,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 172,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 176,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 180,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 184,
+      "n": 4,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "C",
+      "b": 188,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 192,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 196,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 200,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 204,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 208,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 212,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "G",
+      "b": 216,
+      "n": 4,
+      "section": "Chorus"
+    },
+    {
+      "c": "D",
+      "b": 220,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 224,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 228,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 232,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 236,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 240,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 244,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 248,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 252,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 256,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 260,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 264,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 268,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 272,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 276,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 280,
+      "n": 4,
+      "section": "Solo"
+    },
+    {
+      "c": "D",
+      "b": 284,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 288,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 292,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 296,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 300,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 304,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 308,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 312,
+      "n": 4,
+      "section": "Bridge"
+    },
+    {
+      "c": "C",
+      "b": 316,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 320,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 324,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 328,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 332,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 336,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 340,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "Am",
+      "b": 344,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "C",
+      "b": 348,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "D",
+      "b": 352,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "D",
+      "b": 356,
+      "n": 4,
+      "strum": "ring"
+    },
+    {
+      "c": "G",
+      "b": 360,
+      "n": 4,
+      "section": "Soft Chorus",
+      "strum": "soft4"
+    },
+    {
+      "c": "D",
+      "b": 364,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "Am",
+      "b": 368,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 372,
+      "n": 4,
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 376,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 380,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 384,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 388,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 392,
+      "n": 4,
+      "section": "Final Chorus"
+    },
+    {
+      "c": "D",
+      "b": 396,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 400,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 404,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 408,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 412,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 416,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 420,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 424,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 428,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 432,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 436,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 440,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 444,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 448,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 452,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 456,
+      "n": 16,
+      "section": "Outro",
+      "strum": "ring"
+    }
+  ],
+  "lyrics": [
+    {
+      "startSec": 0.194,
+      "endSec": 20.368,
+      "text": "Acoustic Intro",
+      "soft": true
+    },
+    {
+      "startSec": 20.368,
+      "endSec": 24.403,
+      "text": "I am not the kind of girl who should be rudely bargin’ in"
+    },
+    {
+      "startSec": 24.403,
+      "endSec": 28.438,
+      "text": "On a white veil occasion"
+    },
+    {
+      "startSec": 28.438,
+      "endSec": 32.472,
+      "text": "But you are not the kind of boy"
+    },
+    {
+      "startSec": 32.472,
+      "endSec": 36.507,
+      "text": "Who should be marrying the wrong girl"
+    },
+    {
+      "startSec": 36.507,
+      "endSec": 40.542,
+      "text": "I sneak in and see your friends"
+    },
+    {
+      "startSec": 40.542,
+      "endSec": 44.576,
+      "text": "And her snotty little family all dressed in pastel"
+    },
+    {
+      "startSec": 44.576,
+      "endSec": 48.611,
+      "text": "And she is yelling at a bridesmaid somewhere back inside a room"
+    },
+    {
+      "startSec": 48.611,
+      "endSec": 52.646,
+      "text": "Wearing a gown shaped like a pastry"
+    },
+    {
+      "startSec": 52.646,
+      "endSec": 56.681,
+      "text": "Don’t say “Yes”, run away now"
+    },
+    {
+      "startSec": 56.681,
+      "endSec": 60.715,
+      "text": "I’ll meet you when you’re out of the church at the back door"
+    },
+    {
+      "startSec": 60.715,
+      "endSec": 64.75,
+      "text": "Don’t wait or say a single vow"
+    },
+    {
+      "startSec": 64.75,
+      "endSec": 68.785,
+      "text": "You need to hear me out — and they said, “Speak now”"
+    },
+    {
+      "startSec": 68.785,
+      "endSec": 76.854,
+      "text": "Fond gestures are exchanged, and the organ starts to play"
+    },
+    {
+      "startSec": 76.854,
+      "endSec": 84.924,
+      "text": "A song that sounds like a death march"
+    },
+    {
+      "startSec": 84.924,
+      "endSec": 92.993,
+      "text": "And I am hiding in the curtains, it seems that I was uninvited"
+    },
+    {
+      "startSec": 92.993,
+      "endSec": 97.028,
+      "text": "She floats down the aisle like a pageant queen"
+    },
+    {
+      "startSec": 97.028,
+      "endSec": 101.063,
+      "text": "But I know you wish it was me — you wish it was me"
+    },
+    {
+      "startSec": 101.063,
+      "endSec": 109.132,
+      "text": "Don’t you?"
+    },
+    {
+      "startSec": 109.132,
+      "endSec": 113.167,
+      "text": "Don’t say “Yes”, run away now"
+    },
+    {
+      "startSec": 113.167,
+      "endSec": 117.202,
+      "text": "I’ll meet you when you’re out of the church at the back door"
+    },
+    {
+      "startSec": 117.202,
+      "endSec": 121.236,
+      "text": "Don’t wait or say a single vow"
+    },
+    {
+      "startSec": 121.236,
+      "endSec": 125.271,
+      "text": "You need to hear me out — and they said, “Speak now”"
+    },
+    {
+      "startSec": 125.271,
+      "endSec": 129.306,
+      "text": "Don’t say “Yes”, run away now"
+    },
+    {
+      "startSec": 129.306,
+      "endSec": 133.341,
+      "text": "I’ll meet you when you’re out of the church at the back door"
+    },
+    {
+      "startSec": 133.341,
+      "endSec": 137.375,
+      "text": "Don’t wait or say a single vow"
+    },
+    {
+      "startSec": 137.375,
+      "endSec": 141.41,
+      "text": "Your time is running out — and they said, “Speak now”"
+    },
+    {
+      "startSec": 141.41,
+      "endSec": 157.549,
+      "text": "Guitar Solo",
+      "soft": true
+    },
+    {
+      "startSec": 157.549,
+      "endSec": 165.619,
+      "text": "I hear the preacher say, “Speak now or forever hold your peace”"
+    },
+    {
+      "startSec": 165.619,
+      "endSec": 173.688,
+      "text": "There’s the silence, there’s my last chance"
+    },
+    {
+      "startSec": 173.688,
+      "endSec": 177.723,
+      "text": "I stand up with shaky hands, all eyes on me"
+    },
+    {
+      "startSec": 177.723,
+      "endSec": 181.758,
+      "text": "Horrified looks from everyone in the room — but I’m only looking at you"
+    },
+    {
+      "startSec": 181.758,
+      "endSec": 185.792,
+      "text": "I am not the kind of girl who should be rudely bargin’ in"
+    },
+    {
+      "startSec": 185.792,
+      "endSec": 189.827,
+      "text": "On a white veil occasion"
+    },
+    {
+      "startSec": 189.827,
+      "endSec": 193.862,
+      "text": "But you are not the kind of boy"
+    },
+    {
+      "startSec": 193.862,
+      "endSec": 197.896,
+      "text": "Who should be marrying the wrong girl"
+    },
+    {
+      "startSec": 197.896,
+      "endSec": 201.931,
+      "text": "So don’t say “Yes”, run away now"
+    },
+    {
+      "startSec": 201.931,
+      "endSec": 205.966,
+      "text": "I’ll meet you when you’re out of the church at the back door"
+    },
+    {
+      "startSec": 205.966,
+      "endSec": 210.001,
+      "text": "Don’t wait or say a single vow"
+    },
+    {
+      "startSec": 210.001,
+      "endSec": 214.035,
+      "text": "You need to hear me out — and they said, “Speak now”"
+    },
+    {
+      "startSec": 214.035,
+      "endSec": 218.07,
+      "text": "And you’ll say, “Let’s run away now"
+    },
+    {
+      "startSec": 218.07,
+      "endSec": 222.105,
+      "text": "I’ll meet you when I’m out of my tux at the back door”"
+    },
+    {
+      "startSec": 222.105,
+      "endSec": 226.14,
+      "text": "Baby, I didn’t say my vow"
+    },
+    {
+      "startSec": 226.14,
+      "endSec": 236.226,
+      "text": "So glad you were around when they said, “Speak now”"
+    }
+  ]
+}

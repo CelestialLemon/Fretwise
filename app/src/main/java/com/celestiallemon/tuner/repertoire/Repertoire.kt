@@ -33,9 +33,22 @@ data class Song(
     val addedAt: Long,
     /** Every day this song was practiced, as ISO dates, ascending, no repeats. */
     val practiced: List<String> = emptyList(),
+    /** Optional id of a bundled play-along chart (matches `assets/charts/<id>.json`). */
+    val chartId: String? = null,
+    /** e.g. "Capo 2" or "No capo". */
+    val capoLabel: String = "",
+    /** e.g. "Key of G" or "Key of D (C shapes)". */
+    val keyLabel: String = "",
+    /** Time signature label, e.g. "4/4" or "6/8". */
+    val timeSig: String = "",
+    /** Distinct chord shapes used in this song. */
+    val chords: List<String> = emptyList(),
+    /** Optional persisted URI to a local play-along video file for this song. */
+    val videoUri: String = "",
 ) {
     val practiceCount: Int get() = practiced.size
     val lastPracticed: LocalDate? get() = practiced.lastOrNull()?.let(LocalDate::parse)
+    val hasPlayAlong: Boolean get() = !chartId.isNullOrBlank() || videoUri.isNotBlank()
 
     fun practicedOn(day: LocalDate) = day.toString() in practiced
 
@@ -43,6 +56,16 @@ data class Song(
     fun togglePracticed(day: LocalDate): Song {
         val key = day.toString()
         return copy(practiced = if (key in practiced) practiced - key else (practiced + key).sorted())
+    }
+
+    /** Explicitly sets whether [day] is marked as practiced. */
+    fun withPracticed(day: LocalDate, done: Boolean): Song {
+        val key = day.toString()
+        return when {
+            done && key !in practiced -> copy(practiced = (practiced + key).sorted())
+            !done && key in practiced -> copy(practiced = practiced - key)
+            else -> this
+        }
     }
 
     fun movedTo(level: Level, now: Long) = if (level == this.level) this else copy(level = level, levelSince = now)

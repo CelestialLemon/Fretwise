@@ -21,11 +21,14 @@ import com.celestiallemon.tuner.repertoire.RepertoireUiState
 import com.celestiallemon.tuner.repertoire.Song
 import com.celestiallemon.tuner.repertoire.planDay
 import com.celestiallemon.tuner.ui.AppShell
+import com.celestiallemon.tuner.ui.ChordPracticeScreen
 import com.celestiallemon.tuner.ui.FretwiseTheme
 import com.celestiallemon.tuner.ui.MetronomeScreen
 import com.celestiallemon.tuner.ui.RepertoireActions
 import com.celestiallemon.tuner.ui.RepertoireScreen
 import com.celestiallemon.tuner.ui.Tab
+import com.celestiallemon.tuner.playalong.ChordEvent
+import com.celestiallemon.tuner.playalong.SongChart
 import java.time.LocalDate
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Test
@@ -119,10 +122,10 @@ class ScreenshotTest {
     )
 
     @Test
-    fun metronome() = shell("9-metronome", Tab.Metronome) {
+    fun metronome() = shell("9-metronome", Tab.Practice) {
         MetronomeScreen(
             MetronomeUiState(bpm = 92, signature = TimeSignature.SixEight, songTitle = "Blackbird"),
-            engine = null, onToggle = {}, onBpm = {}, onNudge = {}, onTap = {}, onSignature = {},
+            engine = null, onToggle = {}, onBpm = {}, onNudge = {}, onTap = {}, onSignature = {}, onBack = {},
         )
     }
 
@@ -134,8 +137,8 @@ class ScreenshotTest {
     @Test
     fun repertoire() {
         val songs = listOf(
-            sample("1", "Blackbird", "The Beatles", Level.L1, 92),
-            sample("2", "Tears in Heaven", "Eric Clapton", Level.L1, 80, "2026-11-10"),
+            sample("1", "Mine", "Taylor Swift", Level.L1, 121).copy(chartId = "mine", capoLabel = "No capo", chords = listOf("C", "G", "D", "Em")),
+            sample("2", "Love Story", "Taylor Swift", Level.L1, 119, "2026-11-10").copy(chartId = "love_story", capoLabel = "Capo 2"),
             sample("3", "Dust in the Wind", "Kansas", Level.L1, null, "2026-11-12"),
             sample("4", "Romanza", "Anonymous", Level.L1, 60, "2026-11-11"),
             sample("5", "Wish You Were Here", "Pink Floyd", Level.L2, 60, "2026-11-08", "2026-11-13"),
@@ -144,14 +147,52 @@ class ScreenshotTest {
             sample("8", "Horse with No Name", "America", Level.Memory, 123, "2026-11-01"),
         )
         val state = RepertoireUiState(loaded = true, songs = songs, today = today, plan = planDay(today, songs, null))
-        shell("10-repertoire", Tab.Repertoire, left = state.todaySongs.size - state.doneToday) {
+        shell("10-repertoire", Tab.Practice, left = state.todaySongs.size - state.doneToday) {
             RepertoireScreen(state, RepertoireActions())
         }
     }
 
     @Test
-    fun repertoireEmpty() = shell("11-repertoire-empty", Tab.Repertoire, left = 0) {
+    fun repertoireEmpty() = shell("11-repertoire-empty", Tab.Practice, left = 0) {
         RepertoireScreen(RepertoireUiState(loaded = true, today = today), RepertoireActions())
+    }
+
+    @Test
+    fun chordPractice() {
+        val mine = sample("1", "Mine", "Taylor Swift", Level.L1, 121).copy(
+            chartId = "mine",
+            capoLabel = "No capo",
+            keyLabel = "Key of G",
+            chords = listOf("C", "G", "D", "Em"),
+        )
+        val chart = SongChart(
+            id = "mine",
+            title = "Mine",
+            artist = "Taylor Swift",
+            keyLabel = "Key of G",
+            capoLabel = "No capo",
+            bpm = 121.0,
+            timeSig = "4/4",
+            events = listOf(
+                ChordEvent("C", 0.0, 2.0, section = "Chorus"),
+                ChordEvent("G", 2.0, 2.0),
+                ChordEvent("D", 4.0, 2.0),
+                ChordEvent("Em", 6.0, 2.0),
+            ),
+        )
+        shell("12-chords", Tab.Practice, left = 1) {
+            ChordPracticeScreen(
+                songs = listOf(mine),
+                charts = mapOf("mine" to chart),
+                initialSongId = "1",
+                engine = null,
+                metronomePlaying = false,
+                onStartMetronome = { _, _ -> },
+                onStopMetronome = {},
+                onBack = {},
+                onPlaySong = {},
+            )
+        }
     }
 
     @Test

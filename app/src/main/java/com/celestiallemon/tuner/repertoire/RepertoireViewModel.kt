@@ -1,9 +1,13 @@
 package com.celestiallemon.tuner.repertoire
 
 import android.app.Application
+import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.celestiallemon.tuner.playalong.ChartRepository
+import com.celestiallemon.tuner.playalong.SongChart
+import com.celestiallemon.tuner.playalong.VideoLibrary
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -29,8 +33,16 @@ data class RepertoireUiState(
     val plan: DayPlan = DayPlan(LocalDate.now().toString(), emptyMap()),
     /** A parsed backup waiting for the user to confirm it should replace everything. */
     val pendingImport: List<Song>? = null,
+    /** Bundled play-along charts indexed by [SongChart.id]. */
+    val charts: Map<String, SongChart> = emptyMap(),
+    /** Display name of the user's selected video folder, if any. */
+    val videoFolderName: String? = null,
 ) {
     fun song(id: String?) = songs.firstOrNull { it.id == id }
+
+    fun chartFor(song: Song): SongChart? =
+        song.chartId?.let { charts[it] }
+            ?: charts.values.firstOrNull { it.title.equals(song.title, ignoreCase = true) }
 
     /** Today's songs in level order, with whether each is done. */
     val todaySongs: List<Pair<Level, Song>>
@@ -50,6 +62,7 @@ data class SongDraft(
 
 class RepertoireViewModel(application: Application) : AndroidViewModel(application) {
     private val file = File(application.filesDir, "repertoire.json")
+    val videoLibrary = VideoLibrary(application)
 
     /** Set when an unreadable save file couldn't be moved aside; saving would destroy it, so it's off. */
     @Volatile private var saveBlocked = false
@@ -66,8 +79,10 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
 
     init {
         viewModelScope.launch {
-            val data = withContext(Dispatchers.IO) {
-                try {
+            val (data, charts, seeded) = withContext(Dispatchers.IO) {
+                val bundled = ChartRepository.loadBundled(application)
+                val existed = file.exists()
+                val loaded = try {
                     load()
                 } catch (e: Exception) {
                     // Move the unreadable file aside (a rename needs no free space) so no save overwrites it.
@@ -80,14 +95,26 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                     }
                     RepertoireData()
                 }
+                if (!existed && loaded.songs.isEmpty() && bundled.isNotEmpty()) {
+                    val base = System.currentTimeMillis()
+                    val seedSongs = bundled.mapIndexed { idx, chart -> chartToSong(chart, base + idx) }
+                    Triple(RepertoireData(songs = seedSongs), bundled, true)
+                } else {
+                    Triple(loaded, bundled, false)
+                }
             }
             val today = LocalDate.now()
+            val chartMap = charts.associateBy { it.id }
+            val folderName = withContext(Dispatchers.IO) { videoLibrary.folderDisplayName() }
             _state.value = RepertoireUiState(
                 loaded = true,
                 songs = data.songs,
                 today = today,
                 plan = planDay(today, data.songs, data.today),
+                charts = chartMap,
+                videoFolderName = folderName,
             )
+            if (seeded) persist()
             // Roll over to a fresh practice set at midnight even if the app stays open.
             while (true) {
                 val untilMidnight = Duration.between(LocalDateTime.now(), LocalDate.now().plusDays(1).atStartOfDay())
@@ -153,6 +180,82 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
     fun toggleDone(id: String) {
         val today = _state.value.today
         updateSong(id) { it.togglePracticed(today) }
+    }
+
+    fun setPracticedToday(id: String, done: Boolean) {
+        val today = _state.value.today
+        updateSong(id) { it.withPracticed(today, done) }
+    }
+
+    fun setVideoUri(id: String, uri: Uri) {
+        runCatching {
+            getApplication<Application>().contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            )
+        }
+        updateSong(id) { it.copy(videoUri = uri.toString()) }
+    }
+
+    fun setVideoFolder(treeUri: Uri) {
+        runCatching {
+            getApplication<Application>().contentResolver.takePersistableUriPermission(
+                treeUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            )
+        }
+        videoLibrary.folderUri = treeUri
+        val name = videoLibrary.folderDisplayName()
+        _state.update { it.copy(videoFolderName = name) }
+        _messages.trySend(Message(if (name != null) "Video folder set to “$name”" else "Video folder updated"))
+    }
+
+    /**
+     * Merges all bundled play-along charts into the repertoire: links matching existing songs to their
+     * chart metadata, and adds any missing songs to L1.
+     */
+    fun importBundledCharts() {
+        val charts = _state.value.charts.values.sortedBy { it.outputFilename.ifBlank { it.title } }
+        if (charts.isEmpty()) {
+            _messages.trySend(Message("No bundled play-along songs found"))
+            return
+        }
+        var added = 0
+        var linked = 0
+        val now = System.currentTimeMillis()
+        update { s ->
+            val updated = s.songs.toMutableList()
+            for ((idx, chart) in charts.withIndex()) {
+                val matchIdx = updated.indexOfFirst {
+                    it.chartId == chart.id || it.title.equals(chart.title, ignoreCase = true)
+                }
+                if (matchIdx >= 0) {
+                    val existing = updated[matchIdx]
+                    if (existing.chartId != chart.id || existing.chords.isEmpty()) {
+                        updated[matchIdx] = existing.copy(
+                            chartId = chart.id,
+                            bpm = existing.bpm ?: chart.roundedBpm,
+                            capoLabel = existing.capoLabel.ifBlank { chart.capoLabel },
+                            keyLabel = existing.keyLabel.ifBlank { chart.keyLabel },
+                            timeSig = existing.timeSig.ifBlank { chart.timeSig },
+                            chords = existing.chords.ifEmpty { chart.uniqueChords() },
+                        )
+                        linked++
+                    }
+                } else {
+                    updated.add(chartToSong(chart, now + idx))
+                    added++
+                }
+            }
+            s.copy(songs = updated)
+        }
+        val msg = when {
+            added > 0 && linked > 0 -> "Added $added and linked $linked play-along ${plural(added + linked)}"
+            added > 0 -> "Added $added play-along ${plural(added)}"
+            linked > 0 -> "Linked $linked ${plural(linked)} to play-along guides"
+            else -> "All ${charts.size} play-along songs are already in your practice list"
+        }
+        _messages.trySend(Message(msg))
     }
 
     /** Puts [songId] in today's slot for its level. */
@@ -250,6 +353,21 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         val data = BackupFormat.json.decodeFromString(RepertoireData.serializer(), file.readBytes().decodeToString())
         return data.copy(songs = data.songs.map(BackupFormat::normalized))
     }
+
+    private fun chartToSong(chart: SongChart, timestamp: Long): Song = Song(
+        id = "chart-${chart.id}",
+        title = chart.title,
+        artist = chart.artist,
+        bpm = chart.roundedBpm,
+        level = Level.L1,
+        levelSince = timestamp,
+        addedAt = timestamp,
+        chartId = chart.id,
+        capoLabel = chart.capoLabel,
+        keyLabel = chart.keyLabel,
+        timeSig = chart.timeSig,
+        chords = chart.uniqueChords(),
+    )
 
     private fun plural(n: Int) = if (n == 1) "song" else "songs"
 }

@@ -46,12 +46,14 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -119,6 +121,7 @@ fun MetronomeScreen(
     onTap: (Long) -> Unit,
     onSignature: (TimeSignature) -> Unit,
     modifier: Modifier = Modifier,
+    onBack: (() -> Unit)? = null,
 ) {
     // Follow the audio playhead every frame so the lights land on the clicks, not on when they were scheduled.
     var beat by remember { mutableStateOf<MetronomeEngine.Beat?>(null) }
@@ -135,7 +138,17 @@ fun MetronomeScreen(
     }
 
     Column(modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        ScreenHeader("Metronome")
+        if (onBack != null) {
+            Row(
+                Modifier.fillMaxWidth().padding(start = 8.dp, end = 16.dp, top = 8.dp, bottom = 4.dp).height(52.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Back") }
+                Text("Metronome", style = MaterialTheme.typography.headlineMedium)
+            }
+        } else {
+            ScreenHeader("Metronome")
+        }
         AnimatedVisibility(
             visible = state.songTitle != null,
             enter = fadeIn(Motion.effects()) + expandVertically(Motion.spatial()),

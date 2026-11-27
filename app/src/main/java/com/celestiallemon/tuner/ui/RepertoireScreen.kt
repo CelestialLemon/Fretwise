@@ -49,7 +49,11 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.ExpandMore
+import androidx.compose.material.icons.rounded.FolderOpen
+import androidx.compose.material.icons.rounded.GridView
+import androidx.compose.material.icons.rounded.LibraryMusic
 import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.SwapVert
 import androidx.compose.material.icons.rounded.Upload
 import androidx.compose.material.icons.rounded.WarningAmber
@@ -104,7 +108,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import java.time.format.DateTimeFormatter
 
-/** Everything the Repertoire screen can ask for. */
+/** Everything the Practice / Repertoire screen can ask for. */
 class RepertoireActions(
     val add: (SongDraft) -> Unit = {},
     val edit: (String, SongDraft) -> Unit = { _, _ -> },
@@ -116,7 +120,11 @@ class RepertoireActions(
     val readImport: (android.net.Uri) -> Unit = {},
     val confirmImport: () -> Unit = {},
     val cancelImport: () -> Unit = {},
-    val openMetronome: (Song) -> Unit = {},
+    val openMetronome: (Song?) -> Unit = {},
+    val openChords: (Song?) -> Unit = {},
+    val openPlayAlong: (Song) -> Unit = {},
+    val setVideoFolder: (android.net.Uri) -> Unit = {},
+    val importBundled: () -> Unit = {},
 )
 
 /** What a level is for, shown under its name. */
@@ -135,6 +143,9 @@ fun RepertoireScreen(
     modifier: Modifier = Modifier,
     messages: Flow<RepertoireViewModel.Message> = emptyFlow(),
     initiallyOpenSong: String? = null,
+    metronomeBpm: Int = 80,
+    metronomeSignature: String = "4/4",
+    metronomePlaying: Boolean = false,
 ) {
     val context = LocalContext.current
     val snackbar = remember { SnackbarHostState() }
@@ -160,6 +171,9 @@ fun RepertoireScreen(
     }
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         uri?.let(actions.readImport)
+    }
+    val folderLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+        uri?.let(actions.setVideoFolder)
     }
 
     val list = rememberLazyListState()
@@ -189,14 +203,27 @@ fun RepertoireScreen(
             contentPadding = PaddingValues(bottom = 112.dp),
         ) {
             item(key = "header") {
-                ScreenHeader("Repertoire") {
+                ScreenHeader("Practice") {
                     BackupMenu(
+                        videoFolderName = state.videoFolderName,
+                        onSetVideoFolder = { folderLauncher.launch(null) },
+                        onImportBundled = actions.importBundled,
                         onExport = { exportLauncher.launch("fretwise-backup-${state.today}.json") },
                         onImport = { importLauncher.launch(arrayOf("application/json", "application/octet-stream", "text/*")) },
                     )
                 }
             }
             if (state.loaded && state.songs.isEmpty()) {
+                item(key = "tools-empty") {
+                    PracticeToolsRow(
+                        metronomeBpm = metronomeBpm,
+                        metronomeSignature = metronomeSignature,
+                        metronomePlaying = metronomePlaying,
+                        onChords = { actions.openChords(null) },
+                        onMetronome = { actions.openMetronome(null) },
+                        modifier = Modifier.animateItem().padding(horizontal = 16.dp, vertical = 4.dp),
+                    )
+                }
                 item(key = "empty") {
                     EmptyState(
                         icon = Icons.AutoMirrored.Rounded.QueueMusic,
@@ -227,6 +254,20 @@ fun RepertoireScreen(
                         modifier = Modifier.animateItem().padding(horizontal = 16.dp, vertical = 8.dp),
                     )
                 }
+            }
+            item(key = "tools") {
+                PracticeToolsRow(
+                    metronomeBpm = metronomeBpm,
+                    metronomeSignature = metronomeSignature,
+                    metronomePlaying = metronomePlaying,
+                    onChords = {
+                        val nextUp = state.todaySongs.firstOrNull { (_, s) -> !s.practicedOn(state.today) }?.second
+                            ?: state.todaySongs.firstOrNull()?.second
+                        actions.openChords(nextUp)
+                    },
+                    onMetronome = { actions.openMetronome(null) },
+                    modifier = Modifier.animateItem().padding(horizontal = 16.dp, vertical = 6.dp),
+                )
             }
             for (level in Level.entries) {
                 val songs = state.songs.inLevel(level)
@@ -283,6 +324,14 @@ fun RepertoireScreen(
                 detailId = null
                 actions.openMetronome(song)
             },
+            onChords = {
+                detailId = null
+                actions.openChords(song)
+            },
+            onPlayAlong = {
+                detailId = null
+                actions.openPlayAlong(song)
+            },
         )
     }
     if (adding || editId != null) {
@@ -334,7 +383,93 @@ fun RepertoireScreen(
 }
 
 @Composable
-private fun BackupMenu(onExport: () -> Unit, onImport: () -> Unit) {
+private fun PracticeToolsRow(
+    metronomeBpm: Int,
+    metronomeSignature: String,
+    metronomePlaying: Boolean,
+    onChords: () -> Unit,
+    onMetronome: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        PracticeToolCard(
+            icon = Icons.Rounded.GridView,
+            title = "Chords",
+            subtitle = "Diagrams & drills",
+            badge = null,
+            onClick = onChords,
+            modifier = Modifier.weight(1f),
+        )
+        PracticeToolCard(
+            icon = Icons.Rounded.Metronome,
+            title = "Metronome",
+            subtitle = "$metronomeBpm BPM · $metronomeSignature",
+            badge = if (metronomePlaying) ({ PlayingDot() }) else null,
+            onClick = onMetronome,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun PracticeToolCard(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    title: String,
+    subtitle: String,
+    badge: (@Composable () -> Unit)?,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val interaction = remember { MutableInteractionSource() }
+    Surface(
+        onClick = onClick,
+        modifier = modifier.pressScale(interaction, 0.96f),
+        shape = MaterialTheme.shapes.large,
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        interactionSource = interaction,
+    ) {
+        Row(
+            Modifier.padding(horizontal = 14.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                Modifier
+                    .size(38.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.65f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(icon, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(title, style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    if (badge != null) {
+                        Spacer(Modifier.width(6.dp))
+                        badge()
+                    }
+                }
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BackupMenu(
+    videoFolderName: String?,
+    onSetVideoFolder: () -> Unit,
+    onImportBundled: () -> Unit,
+    onExport: () -> Unit,
+    onImport: () -> Unit,
+) {
     var open by remember { mutableStateOf(false) }
     Box {
         IconButton(onClick = { open = true }) { Icon(Icons.Rounded.MoreVert, "More options") }
@@ -344,6 +479,33 @@ private fun BackupMenu(onExport: () -> Unit, onImport: () -> Unit) {
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             shape = MaterialTheme.shapes.medium,
         ) {
+            DropdownMenuItem(
+                text = {
+                    Column {
+                        Text("Video folder")
+                        if (!videoFolderName.isNullOrBlank()) {
+                            Text(
+                                videoFolderName,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Palette.Brass,
+                            )
+                        }
+                    }
+                },
+                leadingIcon = { Icon(Icons.Rounded.FolderOpen, null) },
+                onClick = {
+                    open = false
+                    onSetVideoFolder()
+                },
+            )
+            DropdownMenuItem(
+                text = { Text("Sync play-along songs") },
+                leadingIcon = { Icon(Icons.Rounded.LibraryMusic, null) },
+                onClick = {
+                    open = false
+                    onImportBundled()
+                },
+            )
             DropdownMenuItem(
                 text = { Text("Export backup") },
                 leadingIcon = { Icon(Icons.Rounded.Upload, null) },
@@ -625,7 +787,22 @@ private fun SongRow(song: Song, isToday: Boolean, summary: String, onClick: () -
                     )
                 }
                 Spacer(Modifier.height(4.dp))
-                Text(summary, style = MaterialTheme.typography.labelMedium, color = Palette.Faint)
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    if (song.hasPlayAlong) {
+                        Icon(
+                            Icons.Rounded.PlayCircle,
+                            contentDescription = "Has play-along video",
+                            tint = Palette.Brass,
+                            modifier = Modifier.size(14.dp),
+                        )
+                    }
+                    val capo = song.capoLabel.takeIf { it.isNotBlank() && !it.equals("No capo", ignoreCase = true) }
+                    if (capo != null) {
+                        Text(capo, style = MaterialTheme.typography.labelMedium, color = Palette.Brass)
+                        Text("·", style = MaterialTheme.typography.labelMedium, color = Palette.Faint)
+                    }
+                    Text(summary, style = MaterialTheme.typography.labelMedium, color = Palette.Faint, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
             }
             song.bpm?.let { bpm ->
                 Column(Modifier.padding(start = 12.dp), horizontalAlignment = Alignment.CenterHorizontally) {

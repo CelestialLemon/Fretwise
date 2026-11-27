@@ -1,0 +1,792 @@
+{
+  "id": "perfect",
+  "title": "Perfect",
+  "artist": "Ed Sheeran",
+  "keyLabel": "Key of Ab (G shapes)",
+  "capoLabel": "Capo 1",
+  "bpm": 189.9862,
+  "bar1StartSec": 22.199,
+  "timeSig": "6/8",
+  "ppb": 56,
+  "durationSec": 278.5,
+  "videoPath": "raw/perfect.mp4",
+  "videoLayout": "widescreen",
+  "videoShiftY": 130,
+  "outputFilename": "03 - Ed Sheeran - Perfect (Play-Along).mp4",
+  "events": [
+    {
+      "c": "G",
+      "b": 0,
+      "n": 12,
+      "section": "Verse 1"
+    },
+    {
+      "c": "Em",
+      "b": 12,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 24,
+      "n": 12
+    },
+    {
+      "c": "D",
+      "b": 36,
+      "n": 12
+    },
+    {
+      "c": "G",
+      "b": 48,
+      "n": 12
+    },
+    {
+      "c": "Em",
+      "b": 60,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 72,
+      "n": 12
+    },
+    {
+      "c": "D",
+      "b": 84,
+      "n": 12
+    },
+    {
+      "c": "G",
+      "b": 96,
+      "n": 12,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "Em",
+      "b": 108,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 120,
+      "n": 12
+    },
+    {
+      "c": "G",
+      "b": 132,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 138,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 144,
+      "n": 12
+    },
+    {
+      "c": "Em",
+      "b": 156,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 168,
+      "n": 12
+    },
+    {
+      "c": "D",
+      "b": 180,
+      "n": 12
+    },
+    {
+      "c": "Em",
+      "b": 192,
+      "n": 6,
+      "section": "Chorus"
+    },
+    {
+      "c": "C",
+      "b": 198,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 204,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 210,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 216,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 222,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 228,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 234,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 240,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 246,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 252,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 258,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 264,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 270,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 276,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 282,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 288,
+      "n": 6,
+      "section": "Interlude"
+    },
+    {
+      "c": "Em",
+      "b": 294,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 300,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 306,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 312,
+      "n": 12,
+      "section": "Verse 2"
+    },
+    {
+      "c": "Em",
+      "b": 324,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 336,
+      "n": 12
+    },
+    {
+      "c": "D",
+      "b": 348,
+      "n": 12
+    },
+    {
+      "c": "G",
+      "b": 360,
+      "n": 12
+    },
+    {
+      "c": "Em",
+      "b": 372,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 384,
+      "n": 12
+    },
+    {
+      "c": "D",
+      "b": 396,
+      "n": 12
+    },
+    {
+      "c": "G",
+      "b": 408,
+      "n": 12,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "Em",
+      "b": 420,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 432,
+      "n": 12
+    },
+    {
+      "c": "G",
+      "b": 444,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 450,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 456,
+      "n": 12
+    },
+    {
+      "c": "Em",
+      "b": 468,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 480,
+      "n": 12
+    },
+    {
+      "c": "D",
+      "b": 492,
+      "n": 12
+    },
+    {
+      "c": "Em",
+      "b": 504,
+      "n": 6,
+      "section": "Chorus"
+    },
+    {
+      "c": "C",
+      "b": 510,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 516,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 522,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 528,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 534,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 540,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 546,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 552,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 558,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 564,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 570,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 576,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 582,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 588,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 594,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 600,
+      "n": 12,
+      "section": "Solo"
+    },
+    {
+      "c": "Em",
+      "b": 612,
+      "n": 12
+    },
+    {
+      "c": "C",
+      "b": 624,
+      "n": 12
+    },
+    {
+      "c": "D",
+      "b": 636,
+      "n": 12
+    },
+    {
+      "c": "Em",
+      "b": 648,
+      "n": 6,
+      "section": "Final Chorus"
+    },
+    {
+      "c": "C",
+      "b": 654,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 660,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 666,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 672,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 678,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 684,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 690,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 696,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 702,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 708,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 714,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 720,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 726,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 732,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 738,
+      "n": 6
+    },
+    {
+      "c": "Em",
+      "b": 744,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 750,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 756,
+      "n": 12,
+      "strum": "ring"
+    },
+    {
+      "c": "G",
+      "b": 768,
+      "n": 6,
+      "section": "Outro"
+    },
+    {
+      "c": "Em",
+      "b": 774,
+      "n": 6
+    },
+    {
+      "c": "C",
+      "b": 780,
+      "n": 6
+    },
+    {
+      "c": "D",
+      "b": 786,
+      "n": 6
+    },
+    {
+      "c": "G",
+      "b": 792,
+      "n": 18,
+      "strum": "ring"
+    }
+  ],
+  "lyrics": [
+    {
+      "startSec": 20.312,
+      "endSec": 22.022,
+      "text": "I found a love"
+    },
+    {
+      "startSec": 23.315,
+      "endSec": 25.734,
+      "text": "For me"
+    },
+    {
+      "startSec": 27.819,
+      "endSec": 31.573,
+      "text": "Darling, just dive right in"
+    },
+    {
+      "startSec": 31.573,
+      "endSec": 33.867,
+      "text": "And follow my lead"
+    },
+    {
+      "startSec": 35.369,
+      "endSec": 37.496,
+      "text": "Well, I found a girl"
+    },
+    {
+      "startSec": 39.081,
+      "endSec": 42.918,
+      "text": "Beautiful and sweet"
+    },
+    {
+      "startSec": 42.918,
+      "endSec": 49.508,
+      "text": "Oh, I never knew you were that someone waiting for me"
+    },
+    {
+      "startSec": 49.508,
+      "endSec": 54.388,
+      "text": "Cos we were just kids when we fell in love"
+    },
+    {
+      "startSec": 54.388,
+      "endSec": 58.1,
+      "text": "Not knowing what it was"
+    },
+    {
+      "startSec": 58.1,
+      "endSec": 65.816,
+      "text": "I will not give you up this time"
+    },
+    {
+      "startSec": 65.816,
+      "endSec": 69.486,
+      "text": "Darling, just kiss me slow"
+    },
+    {
+      "startSec": 69.486,
+      "endSec": 73.323,
+      "text": "Your heart is all I own"
+    },
+    {
+      "startSec": 73.323,
+      "endSec": 79.955,
+      "text": "And in your eyes, you're holding mine"
+    },
+    {
+      "startSec": 79.955,
+      "endSec": 82.291,
+      "text": "Baby, I'm..."
+    },
+    {
+      "startSec": 83.792,
+      "endSec": 87.254,
+      "text": "Dancing in the dark"
+    },
+    {
+      "startSec": 87.254,
+      "endSec": 91.3,
+      "text": "With you between my arms"
+    },
+    {
+      "startSec": 91.3,
+      "endSec": 95.22,
+      "text": "Barefoot on the grass"
+    },
+    {
+      "startSec": 95.22,
+      "endSec": 98.348,
+      "text": "Listening to our favourite song"
+    },
+    {
+      "startSec": 98.348,
+      "endSec": 101.81,
+      "text": "When you said you looked a mess"
+    },
+    {
+      "startSec": 101.81,
+      "endSec": 105.522,
+      "text": "I whispered underneath my breath"
+    },
+    {
+      "startSec": 105.522,
+      "endSec": 108.066,
+      "text": "But you heard it"
+    },
+    {
+      "startSec": 108.066,
+      "endSec": 112.404,
+      "text": "Darling, you look perfect tonight"
+    },
+    {
+      "startSec": 118.66,
+      "endSec": 120.829,
+      "text": "Well, I found a woman"
+    },
+    {
+      "startSec": 122.247,
+      "endSec": 126.126,
+      "text": "Stronger than anyone I know"
+    },
+    {
+      "startSec": 126.126,
+      "endSec": 127.878,
+      "text": "She shares my dreams"
+    },
+    {
+      "startSec": 127.878,
+      "endSec": 133.967,
+      "text": "I hope that someday I'll share her home, oh"
+    },
+    {
+      "startSec": 133.967,
+      "endSec": 136.094,
+      "text": "I found a lover"
+    },
+    {
+      "startSec": 138.18,
+      "endSec": 141.934,
+      "text": "To carry more than just my secrets"
+    },
+    {
+      "startSec": 141.934,
+      "endSec": 148.273,
+      "text": "To carry love, to carry children of our own"
+    },
+    {
+      "startSec": 148.273,
+      "endSec": 152.861,
+      "text": "We are still kids, but we're so in love"
+    },
+    {
+      "startSec": 152.861,
+      "endSec": 156.823,
+      "text": "Fighting against all odds"
+    },
+    {
+      "startSec": 156.823,
+      "endSec": 164.289,
+      "text": "I know we'll be alright this time"
+    },
+    {
+      "startSec": 164.289,
+      "endSec": 167.835,
+      "text": "Darling, just hold my hand"
+    },
+    {
+      "startSec": 167.835,
+      "endSec": 171.713,
+      "text": "Be my girl, I'll be your man"
+    },
+    {
+      "startSec": 171.713,
+      "endSec": 178.345,
+      "text": "I see my future in your eyes"
+    },
+    {
+      "startSec": 178.345,
+      "endSec": 180.806,
+      "text": "Baby, I'm..."
+    },
+    {
+      "startSec": 182.224,
+      "endSec": 185.853,
+      "text": "Dancing in the dark"
+    },
+    {
+      "startSec": 185.853,
+      "endSec": 189.898,
+      "text": "With you between my arms"
+    },
+    {
+      "startSec": 189.898,
+      "endSec": 193.485,
+      "text": "Barefoot on the grass"
+    },
+    {
+      "startSec": 193.485,
+      "endSec": 196.864,
+      "text": "Listening to our favourite song"
+    },
+    {
+      "startSec": 196.864,
+      "endSec": 202.911,
+      "text": "When I saw you in that dress, looking so beautiful"
+    },
+    {
+      "startSec": 202.911,
+      "endSec": 206.456,
+      "text": "I don't deserve this"
+    },
+    {
+      "startSec": 206.456,
+      "endSec": 211.044,
+      "text": "Darling, you look perfect tonight"
+    },
+    {
+      "startSec": 216.842,
+      "endSec": 218.302,
+      "text": "(Darling, oh)"
+    },
+    {
+      "startSec": 223.932,
+      "endSec": 227.728,
+      "text": "Baby, I'm..."
+    },
+    {
+      "startSec": 227.728,
+      "endSec": 231.44,
+      "text": "Dancing in the dark"
+    },
+    {
+      "startSec": 231.44,
+      "endSec": 234.234,
+      "text": "With you between my arms"
+    },
+    {
+      "startSec": 235.444,
+      "endSec": 239.031,
+      "text": "Barefoot on the grass"
+    },
+    {
+      "startSec": 239.031,
+      "endSec": 242.242,
+      "text": "Listening to our favourite song"
+    },
+    {
+      "startSec": 242.242,
+      "endSec": 245.787,
+      "text": "I have faith in what I see"
+    },
+    {
+      "startSec": 245.787,
+      "endSec": 252.127,
+      "text": "Now I know I have met an angel in person"
+    },
+    {
+      "startSec": 252.127,
+      "endSec": 255.839,
+      "text": "And she looks perfect"
+    },
+    {
+      "startSec": 255.839,
+      "endSec": 260.01,
+      "text": "I don't deserve this"
+    },
+    {
+      "startSec": 260.01,
+      "endSec": 264.097,
+      "text": "You look perfect tonight"
+    }
+  ]
+}

@@ -20,8 +20,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.LibraryBooks
-import androidx.compose.material.icons.automirrored.rounded.LibraryBooks
+import androidx.compose.material.icons.automirrored.rounded.QueueMusic
 import androidx.compose.material.icons.rounded.GraphicEq
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -45,13 +44,12 @@ import androidx.compose.ui.unit.dp
 
 enum class Tab(val label: String, val icon: ImageVector) {
     Tuner("Tuner", Icons.Rounded.GraphicEq),
-    Metronome("Metronome", Icons.Rounded.Metronome),
-    Repertoire("Repertoire", Icons.AutoMirrored.Rounded.LibraryBooks),
+    Practice("Practice", Icons.AutoMirrored.Rounded.QueueMusic),
 }
 
 /**
- * The app frame: bottom navigation and a fade-through between tabs (with a slight drift in the direction
- * of travel). Each tab keeps its scroll position and other UI state while you're on another tab.
+ * The app frame: two-tab bottom navigation (Tuner -> Practice) and a fade-through between tabs.
+ * Each tab keeps its scroll position and UI state while you're on the other tab.
  */
 @Composable
 fun AppShell(
@@ -61,7 +59,7 @@ fun AppShell(
     songsLeftToday: Int,
     content: @Composable (Tab) -> Unit,
 ) {
-    // Keep the screen awake while tuning or while the metronome runs.
+    // Keep the screen awake while tuning or while the metronome/chord drill runs.
     val view = LocalView.current
     val keepOn = tab == Tab.Tuner || metronomePlaying
     SideEffect { view.keepScreenOn = keepOn }
@@ -81,8 +79,8 @@ fun AppShell(
                             BadgedBox(
                                 badge = {
                                     when {
-                                        item == Tab.Metronome && metronomePlaying && !selected -> PlayingDot()
-                                        item == Tab.Repertoire && songsLeftToday > 0 -> Badge(
+                                        item == Tab.Practice && metronomePlaying && !selected -> PlayingDot()
+                                        item == Tab.Practice && songsLeftToday > 0 -> Badge(
                                             containerColor = MaterialTheme.colorScheme.primary,
                                             contentColor = MaterialTheme.colorScheme.onPrimary,
                                         ) { Text("$songsLeftToday") }
@@ -90,7 +88,7 @@ fun AppShell(
                                 },
                             ) {
                                 val iconLabel = when {
-                                    item == Tab.Repertoire && songsLeftToday > 0 -> "${item.label}, $songsLeftToday songs left to practice today"
+                                    item == Tab.Practice && songsLeftToday > 0 -> "${item.label}, $songsLeftToday songs left to practice today"
                                     else -> null
                                 }
                                 Icon(item.icon, iconLabel)
@@ -127,12 +125,12 @@ fun AppShell(
     }
 }
 
-/** A small brass dot that breathes while the metronome plays on another tab. */
+/** A small brass dot that breathes while the metronome plays in the background. */
 @Composable
-private fun PlayingDot() {
+fun PlayingDot() {
     val transition = rememberInfiniteTransition(label = "playingDot")
     val alpha by transition.animateFloat(0.35f, 1f, infiniteRepeatable(tween(600), RepeatMode.Reverse), label = "dotAlpha")
-    // A dark ring keeps the dot readable on top of the icon.
+    // A dark ring keeps the dot readable on top of icons or surfaces.
     Box(
         Modifier
             .size(12.dp)

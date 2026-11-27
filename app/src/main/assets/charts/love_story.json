@@ -1,0 +1,673 @@
+{
+  "id": "love_story",
+  "title": "Love Story",
+  "artist": "Taylor Swift",
+  "keyLabel": "Key of D → E (C → D shapes)",
+  "capoLabel": "Capo 2",
+  "bpm": 119.0003,
+  "bar1StartSec": 0.7038,
+  "timeSig": "4/4",
+  "ppb": 82,
+  "durationSec": 233.5,
+  "videoPath": "raw/love_story.mp4",
+  "videoLayout": "widescreen",
+  "videoShiftY": 145,
+  "outputFilename": "04 - Taylor Swift - Love Story (Play-Along).mp4",
+  "events": [
+    {
+      "c": "C",
+      "b": 0,
+      "n": 8,
+      "section": "Intro",
+      "strum": "soft4"
+    },
+    {
+      "c": "G",
+      "b": 8,
+      "n": 8,
+      "strum": "soft4"
+    },
+    {
+      "c": "Am",
+      "b": 16,
+      "n": 8,
+      "strum": "soft4"
+    },
+    {
+      "c": "F",
+      "b": 24,
+      "n": 8,
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 32,
+      "n": 8,
+      "section": "Verse 1"
+    },
+    {
+      "c": "F",
+      "b": 40,
+      "n": 8
+    },
+    {
+      "c": "Am",
+      "b": 48,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 56,
+      "n": 8
+    },
+    {
+      "c": "C",
+      "b": 64,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 72,
+      "n": 8
+    },
+    {
+      "c": "Am",
+      "b": 80,
+      "n": 8
+    },
+    {
+      "c": "G",
+      "b": 88,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 96,
+      "n": 4,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "G",
+      "b": 100,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 104,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 108,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 112,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 116,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 120,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 124,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 126,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 128,
+      "n": 8,
+      "section": "Chorus"
+    },
+    {
+      "c": "G",
+      "b": 136,
+      "n": 8
+    },
+    {
+      "c": "Am",
+      "b": 144,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 152,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 156,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 160,
+      "n": 8,
+      "section": "Interlude",
+      "strum": "soft4"
+    },
+    {
+      "c": "C",
+      "b": 168,
+      "n": 8,
+      "section": "Verse 2"
+    },
+    {
+      "c": "F",
+      "b": 176,
+      "n": 8
+    },
+    {
+      "c": "Am",
+      "b": 184,
+      "n": 8
+    },
+    {
+      "c": "G",
+      "b": 192,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 200,
+      "n": 4,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "G",
+      "b": 204,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 208,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 212,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 216,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 220,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 224,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 228,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 230,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 232,
+      "n": 8,
+      "section": "Chorus"
+    },
+    {
+      "c": "G",
+      "b": 240,
+      "n": 8
+    },
+    {
+      "c": "Am",
+      "b": 248,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 256,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 260,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 264,
+      "n": 8
+    },
+    {
+      "c": "G",
+      "b": 272,
+      "n": 8
+    },
+    {
+      "c": "Am",
+      "b": 280,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 288,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 292,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 296,
+      "n": 8,
+      "section": "Interlude"
+    },
+    {
+      "c": "G",
+      "b": 304,
+      "n": 8
+    },
+    {
+      "c": "Am",
+      "b": 312,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 320,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 324,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 328,
+      "n": 4,
+      "section": "Bridge"
+    },
+    {
+      "c": "F",
+      "b": 332,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 336,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 340,
+      "n": 4
+    },
+    {
+      "c": "Am",
+      "b": 344,
+      "n": 4
+    },
+    {
+      "c": "F",
+      "b": 348,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 352,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 356,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 360,
+      "n": 8,
+      "section": "Soft Chorus",
+      "strum": "ring"
+    },
+    {
+      "c": "G",
+      "b": 368,
+      "n": 8,
+      "strum": "ring"
+    },
+    {
+      "c": "Am",
+      "b": 376,
+      "n": 8
+    },
+    {
+      "c": "F",
+      "b": 384,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 388,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 392,
+      "n": 8,
+      "section": "Key Change · Final Chorus"
+    },
+    {
+      "c": "A",
+      "b": 400,
+      "n": 8
+    },
+    {
+      "c": "Bm",
+      "b": 408,
+      "n": 8
+    },
+    {
+      "c": "G",
+      "b": 416,
+      "n": 4
+    },
+    {
+      "c": "A",
+      "b": 420,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 424,
+      "n": 8
+    },
+    {
+      "c": "A",
+      "b": 432,
+      "n": 8
+    },
+    {
+      "c": "Bm",
+      "b": 440,
+      "n": 8
+    },
+    {
+      "c": "G",
+      "b": 448,
+      "n": 8
+    },
+    {
+      "c": "D",
+      "b": 456,
+      "n": 4,
+      "strum": "ring"
+    }
+  ],
+  "lyrics": [
+    {
+      "startSec": 0.704,
+      "endSec": 16.838,
+      "text": "Banjo & Acoustic Intro",
+      "soft": true
+    },
+    {
+      "startSec": 16.838,
+      "endSec": 20.872,
+      "text": "We were both young when I first saw you"
+    },
+    {
+      "startSec": 20.872,
+      "endSec": 24.905,
+      "text": "I close my eyes and the flashback starts"
+    },
+    {
+      "startSec": 24.905,
+      "endSec": 28.939,
+      "text": "I’m standing there"
+    },
+    {
+      "startSec": 28.939,
+      "endSec": 32.973,
+      "text": "On a balcony in summer air"
+    },
+    {
+      "startSec": 32.973,
+      "endSec": 37.006,
+      "text": "See the lights, see the party, the ball gowns"
+    },
+    {
+      "startSec": 37.006,
+      "endSec": 41.04,
+      "text": "See you make your way through the crowd"
+    },
+    {
+      "startSec": 41.04,
+      "endSec": 45.073,
+      "text": "And say, “Hello”"
+    },
+    {
+      "startSec": 45.073,
+      "endSec": 49.107,
+      "text": "Little did I know"
+    },
+    {
+      "startSec": 49.107,
+      "endSec": 53.141,
+      "text": "That you were Romeo, you were throwing pebbles"
+    },
+    {
+      "startSec": 53.141,
+      "endSec": 57.174,
+      "text": "And my daddy said, “Stay away from Juliet”"
+    },
+    {
+      "startSec": 57.174,
+      "endSec": 61.208,
+      "text": "And I was crying on the staircase"
+    },
+    {
+      "startSec": 61.208,
+      "endSec": 65.241,
+      "text": "Begging you, “Please don’t go,” and I said"
+    },
+    {
+      "startSec": 65.241,
+      "endSec": 69.275,
+      "text": "Romeo, take me somewhere we can be alone"
+    },
+    {
+      "startSec": 69.275,
+      "endSec": 73.309,
+      "text": "I’ll be waiting, all there’s left to do is run"
+    },
+    {
+      "startSec": 73.309,
+      "endSec": 77.342,
+      "text": "You’ll be the prince and I’ll be the princess"
+    },
+    {
+      "startSec": 77.342,
+      "endSec": 81.376,
+      "text": "It’s a love story, baby, just say, “Yes”"
+    },
+    {
+      "startSec": 85.409,
+      "endSec": 89.443,
+      "text": "So I sneak out to the garden to see you"
+    },
+    {
+      "startSec": 89.443,
+      "endSec": 93.477,
+      "text": "We keep quiet ’cause we’re dead if they knew"
+    },
+    {
+      "startSec": 93.477,
+      "endSec": 97.51,
+      "text": "So close your eyes"
+    },
+    {
+      "startSec": 97.51,
+      "endSec": 101.544,
+      "text": "Escape this town for a little while, oh oh"
+    },
+    {
+      "startSec": 101.544,
+      "endSec": 105.577,
+      "text": "’Cause you were Romeo, I was a scarlet letter"
+    },
+    {
+      "startSec": 105.577,
+      "endSec": 109.611,
+      "text": "And my daddy said, “Stay away from Juliet”"
+    },
+    {
+      "startSec": 109.611,
+      "endSec": 113.645,
+      "text": "But you were everything to me"
+    },
+    {
+      "startSec": 113.645,
+      "endSec": 117.678,
+      "text": "I was begging you, “Please don’t go,” and I said"
+    },
+    {
+      "startSec": 117.678,
+      "endSec": 121.712,
+      "text": "Romeo, take me somewhere we can be alone"
+    },
+    {
+      "startSec": 121.712,
+      "endSec": 125.746,
+      "text": "I’ll be waiting, all there’s left to do is run"
+    },
+    {
+      "startSec": 125.746,
+      "endSec": 129.779,
+      "text": "You’ll be the prince and I’ll be the princess"
+    },
+    {
+      "startSec": 129.779,
+      "endSec": 133.813,
+      "text": "It’s a love story, baby, just say, “Yes”"
+    },
+    {
+      "startSec": 133.813,
+      "endSec": 137.846,
+      "text": "Romeo, save me, they’re tryin’ to tell me how to feel"
+    },
+    {
+      "startSec": 137.846,
+      "endSec": 141.88,
+      "text": "This love is difficult, but it’s real"
+    },
+    {
+      "startSec": 141.88,
+      "endSec": 145.914,
+      "text": "Don’t be afraid, we’ll make it out of this mess"
+    },
+    {
+      "startSec": 145.914,
+      "endSec": 149.947,
+      "text": "It’s a love story, baby, just say, “Yes”"
+    },
+    {
+      "startSec": 149.947,
+      "endSec": 166.082,
+      "text": "Oh, oh, oh",
+      "soft": true
+    },
+    {
+      "startSec": 166.082,
+      "endSec": 170.115,
+      "text": "I got tired of waiting"
+    },
+    {
+      "startSec": 170.115,
+      "endSec": 174.149,
+      "text": "Wondering if you were ever coming around"
+    },
+    {
+      "startSec": 174.149,
+      "endSec": 178.182,
+      "text": "My faith in you was fading"
+    },
+    {
+      "startSec": 178.182,
+      "endSec": 182.216,
+      "text": "When I met you on the outskirts of town, and I said"
+    },
+    {
+      "startSec": 182.216,
+      "endSec": 186.25,
+      "text": "Romeo, save me, I’ve been feeling so alone"
+    },
+    {
+      "startSec": 186.25,
+      "endSec": 190.283,
+      "text": "I keep waiting for you, but you never come"
+    },
+    {
+      "startSec": 190.283,
+      "endSec": 194.317,
+      "text": "Is this in my head? I don’t know what to think"
+    },
+    {
+      "startSec": 194.317,
+      "endSec": 198.35,
+      "text": "He knelt to the ground and pulled out a ring, and said"
+    },
+    {
+      "startSec": 198.35,
+      "endSec": 202.384,
+      "text": "“Marry me, Juliet, you’ll never have to be alone"
+    },
+    {
+      "startSec": 202.384,
+      "endSec": 206.418,
+      "text": "I love you, and that’s all I really know"
+    },
+    {
+      "startSec": 206.418,
+      "endSec": 210.451,
+      "text": "I talked to your dad, go pick out a white dress"
+    },
+    {
+      "startSec": 210.451,
+      "endSec": 214.485,
+      "text": "It’s a love story, baby, just say, ‘Yes’”"
+    },
+    {
+      "startSec": 214.485,
+      "endSec": 222.552,
+      "text": "Oh, oh, oh — oh, oh, oh",
+      "soft": true
+    },
+    {
+      "startSec": 222.552,
+      "endSec": 232.636,
+      "text": "’Cause we were both young when I first saw you"
+    }
+  ]
+}

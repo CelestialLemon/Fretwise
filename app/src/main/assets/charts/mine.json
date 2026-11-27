@@ -1,0 +1,1078 @@
+{
+  "id": "mine",
+  "title": "Mine",
+  "artist": "Taylor Swift",
+  "keyLabel": "Key of G",
+  "capoLabel": "No capo",
+  "bpm": 120.989,
+  "bar1StartSec": 1.81854,
+  "timeSig": "4/4",
+  "ppb": 96,
+  "durationSec": 229,
+  "videoPath": "raw/mine.mp4",
+  "videoLayout": "widescreen",
+  "videoShiftY": 170,
+  "outputFilename": "01 - Taylor Swift - Mine (Play-Along).mp4",
+  "events": [
+    {
+      "c": "C",
+      "b": 0,
+      "n": 2,
+      "section": "Intro"
+    },
+    {
+      "c": "G",
+      "b": 2,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 4,
+      "n": 2
+    },
+    {
+      "c": "Em",
+      "b": 6,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 8,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 10,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 12,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 16,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 18,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 20,
+      "n": 2
+    },
+    {
+      "c": "Em",
+      "b": 22,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 24,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 26,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 28,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 32,
+      "n": 2,
+      "section": "Verse 1"
+    },
+    {
+      "c": "G",
+      "b": 34,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 36,
+      "n": 2
+    },
+    {
+      "c": "Em",
+      "b": 38,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 40,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 42,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 44,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 48,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 50,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 52,
+      "n": 2
+    },
+    {
+      "c": "Em",
+      "b": 54,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 56,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 58,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 60,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 64,
+      "n": 2,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "G",
+      "b": 66,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 68,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 72,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 74,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 76,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 80,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 82,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 84,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 88,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 90,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 92,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 96,
+      "n": 4,
+      "section": "Chorus"
+    },
+    {
+      "c": "G",
+      "b": 100,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 104,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 108,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 110,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 112,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 116,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 120,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 124,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 126,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 128,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 132,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 136,
+      "n": 2,
+      "section": "Verse 2"
+    },
+    {
+      "c": "G",
+      "b": 138,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 140,
+      "n": 2
+    },
+    {
+      "c": "Em",
+      "b": 142,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 144,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 146,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 148,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 152,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 154,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 156,
+      "n": 2
+    },
+    {
+      "c": "Em",
+      "b": 158,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 160,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 162,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 164,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 168,
+      "n": 2,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "G",
+      "b": 170,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 172,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 176,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 178,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 180,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 184,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 186,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 188,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 192,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 194,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 196,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 200,
+      "n": 4,
+      "section": "Chorus"
+    },
+    {
+      "c": "G",
+      "b": 204,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 208,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 212,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 214,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 216,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 220,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 224,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 228,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 230,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 232,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 236,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 240,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 244,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 246,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 248,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 252,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 256,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 260,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 262,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 264,
+      "n": 2,
+      "section": "Interlude"
+    },
+    {
+      "c": "G",
+      "b": 266,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 268,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 272,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 274,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 276,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 280,
+      "n": 4,
+      "section": "Bridge"
+    },
+    {
+      "c": "C",
+      "b": 284,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 288,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 292,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 296,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 300,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 304,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 308,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 312,
+      "n": 2,
+      "section": "Pre-Chorus"
+    },
+    {
+      "c": "G",
+      "b": 314,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 316,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 320,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 322,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 324,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 328,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 330,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 332,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 336,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 338,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 340,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 344,
+      "n": 4,
+      "letRing": true
+    },
+    {
+      "c": "C",
+      "b": 348,
+      "n": 4,
+      "letRing": true
+    },
+    {
+      "c": "C",
+      "b": 352,
+      "n": 4,
+      "section": "Soft Chorus",
+      "letRing": true
+    },
+    {
+      "c": "G",
+      "b": 356,
+      "n": 4,
+      "letRing": true
+    },
+    {
+      "c": "D",
+      "b": 360,
+      "n": 4,
+      "letRing": true
+    },
+    {
+      "c": "Em",
+      "b": 364,
+      "n": 2,
+      "letRing": true
+    },
+    {
+      "c": "D",
+      "b": 366,
+      "n": 2,
+      "letRing": true
+    },
+    {
+      "c": "C",
+      "b": 368,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 372,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 376,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 380,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 384,
+      "n": 4,
+      "section": "Outro"
+    },
+    {
+      "c": "G",
+      "b": 388,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 392,
+      "n": 4
+    },
+    {
+      "c": "Em",
+      "b": 396,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 398,
+      "n": 2
+    },
+    {
+      "c": "C",
+      "b": 400,
+      "n": 4
+    },
+    {
+      "c": "G",
+      "b": 404,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 408,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 412,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 416,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 418,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 420,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 424,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 426,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 428,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 432,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 434,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 436,
+      "n": 4
+    },
+    {
+      "c": "C",
+      "b": 440,
+      "n": 2
+    },
+    {
+      "c": "G",
+      "b": 442,
+      "n": 2
+    },
+    {
+      "c": "D",
+      "b": 444,
+      "n": 4
+    },
+    {
+      "c": "D",
+      "b": 448,
+      "n": 4,
+      "letRing": true
+    }
+  ],
+  "lyrics": [
+    {
+      "startSec": 0.43,
+      "endSec": 8.662,
+      "text": "Oh, oh-oh, oh-oh",
+      "soft": true
+    },
+    {
+      "startSec": 8.662,
+      "endSec": 17.688,
+      "text": "Oh, oh-oh, oh-oh",
+      "soft": true
+    },
+    {
+      "startSec": 17.688,
+      "endSec": 21.655,
+      "text": "You were in college working part-time, waitin’ tables"
+    },
+    {
+      "startSec": 21.655,
+      "endSec": 25.622,
+      "text": "Left a small town, never looked back"
+    },
+    {
+      "startSec": 25.622,
+      "endSec": 29.59,
+      "text": "I was a flight risk with a fear of falling"
+    },
+    {
+      "startSec": 29.59,
+      "endSec": 33.557,
+      "text": "Wonderin’ why we bother with love if it never lasts"
+    },
+    {
+      "startSec": 33.557,
+      "endSec": 37.524,
+      "text": "I say, “Can you believe it?”"
+    },
+    {
+      "startSec": 37.524,
+      "endSec": 41.492,
+      "text": "As we’re lying on the couch"
+    },
+    {
+      "startSec": 41.492,
+      "endSec": 45.459,
+      "text": "The moment I could see it"
+    },
+    {
+      "startSec": 45.459,
+      "endSec": 49.426,
+      "text": "Yes, yes, I can see it now"
+    },
+    {
+      "startSec": 49.426,
+      "endSec": 53.393,
+      "text": "Do you remember we were sitting there by the water?"
+    },
+    {
+      "startSec": 53.393,
+      "endSec": 57.361,
+      "text": "You put your arm around me for the first time"
+    },
+    {
+      "startSec": 57.361,
+      "endSec": 61.328,
+      "text": "You made a rebel of a careless man’s careful daughter"
+    },
+    {
+      "startSec": 61.328,
+      "endSec": 67.279,
+      "text": "You are the best thing that’s ever been mine"
+    },
+    {
+      "startSec": 69.263,
+      "endSec": 73.23,
+      "text": "Flash forward and we’re taking on the world together"
+    },
+    {
+      "startSec": 73.23,
+      "endSec": 77.197,
+      "text": "And there’s a drawer of my things at your place"
+    },
+    {
+      "startSec": 77.197,
+      "endSec": 81.165,
+      "text": "You learned my secrets and you figure out why I’m guarded"
+    },
+    {
+      "startSec": 81.165,
+      "endSec": 85.132,
+      "text": "You say we’ll never make my parents’ mistakes"
+    },
+    {
+      "startSec": 85.132,
+      "endSec": 89.099,
+      "text": "But we got bills to pay"
+    },
+    {
+      "startSec": 89.099,
+      "endSec": 93.067,
+      "text": "We got nothing figured out"
+    },
+    {
+      "startSec": 93.067,
+      "endSec": 97.034,
+      "text": "When it was hard to take"
+    },
+    {
+      "startSec": 97.034,
+      "endSec": 101.001,
+      "text": "Yes, yes, this is what I thought about"
+    },
+    {
+      "startSec": 101.001,
+      "endSec": 104.968,
+      "text": "Do you remember we were sitting there by the water?"
+    },
+    {
+      "startSec": 104.968,
+      "endSec": 108.936,
+      "text": "You put your arm around me for the first time"
+    },
+    {
+      "startSec": 108.936,
+      "endSec": 112.903,
+      "text": "You made a rebel of a careless man’s careful daughter"
+    },
+    {
+      "startSec": 112.903,
+      "endSec": 116.87,
+      "text": "You are the best thing that’s ever been mine"
+    },
+    {
+      "startSec": 116.87,
+      "endSec": 120.838,
+      "text": "Do you remember all the city lights on the water?"
+    },
+    {
+      "startSec": 120.838,
+      "endSec": 124.805,
+      "text": "You saw me start to believe for the first time"
+    },
+    {
+      "startSec": 124.805,
+      "endSec": 128.772,
+      "text": "You made a rebel of a careless man’s careful daughter"
+    },
+    {
+      "startSec": 128.772,
+      "endSec": 132.74,
+      "text": "You are the best thing that’s ever been mine"
+    },
+    {
+      "startSec": 132.74,
+      "endSec": 140.674,
+      "text": "Oh, oh-oh, oh-oh",
+      "soft": true
+    },
+    {
+      "startSec": 140.674,
+      "endSec": 144.641,
+      "text": "And I remember that fight, 2:30 AM"
+    },
+    {
+      "startSec": 144.641,
+      "endSec": 148.609,
+      "text": "’Cause everything was slipping right out of our hands"
+    },
+    {
+      "startSec": 148.609,
+      "endSec": 156.543,
+      "text": "I ran out crying and you followed me out into the street"
+    },
+    {
+      "startSec": 156.543,
+      "endSec": 160.511,
+      "text": "Brace myself for the goodbye"
+    },
+    {
+      "startSec": 160.511,
+      "endSec": 164.478,
+      "text": "’Cause that’s all I’ve ever known"
+    },
+    {
+      "startSec": 164.478,
+      "endSec": 168.445,
+      "text": "And you took me by surprise"
+    },
+    {
+      "startSec": 168.445,
+      "endSec": 176.38,
+      "text": "You said, “I’ll never leave you alone”"
+    },
+    {
+      "startSec": 176.38,
+      "endSec": 180.347,
+      "text": "You said, “I remember how we felt sittin’ by the water"
+    },
+    {
+      "startSec": 180.347,
+      "endSec": 184.314,
+      "text": "And every time I look at you, it’s like the first time"
+    },
+    {
+      "startSec": 184.314,
+      "endSec": 188.282,
+      "text": "I fell in love with a careless man’s careful daughter"
+    },
+    {
+      "startSec": 188.282,
+      "endSec": 192.249,
+      "text": "She is the best thing that’s ever been mine”"
+    },
+    {
+      "startSec": 192.249,
+      "endSec": 196.216,
+      "text": "Hold on, make it last"
+    },
+    {
+      "startSec": 196.216,
+      "endSec": 200.184,
+      "text": "Hold on, never turn back"
+    },
+    {
+      "startSec": 200.184,
+      "endSec": 204.151,
+      "text": "You made a rebel of a careless man’s careful daughter"
+    },
+    {
+      "startSec": 204.151,
+      "endSec": 208.118,
+      "text": "You are the best thing that’s ever been mine"
+    },
+    {
+      "startSec": 208.118,
+      "endSec": 212.086,
+      "text": "Yeah, yeah — Do you believe it? Hold on"
+    },
+    {
+      "startSec": 212.086,
+      "endSec": 216.053,
+      "text": "We’re gonna make it now (Hold on)"
+    },
+    {
+      "startSec": 216.053,
+      "endSec": 220.02,
+      "text": "Yeah, yeah, hey — And I can see it"
+    },
+    {
+      "startSec": 220.02,
+      "endSec": 225.971,
+      "text": "And I can see it now, see it now, see it now"
+    }
+  ]
+}
