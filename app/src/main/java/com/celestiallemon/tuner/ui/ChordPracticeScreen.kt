@@ -148,12 +148,12 @@ fun ChordPracticeScreen(
         }
     }
 
-    // Track current beat from the audio playhead.
-    var beat by remember { mutableStateOf<MetronomeEngine.Beat?>(null) }
+    // Track current beat and fractional progress from the audio playhead so offbeat ("&") strums highlight accurately.
+    var playhead by remember { mutableStateOf<MetronomeEngine.PlayheadPosition?>(null) }
     LaunchedEffect(metronomePlaying, engine) {
-        beat = null
+        playhead = null
         if (!metronomePlaying || engine == null) return@LaunchedEffect
-        while (true) withFrameNanos { beat = engine.playheadBeat() }
+        while (true) withFrameNanos { playhead = engine.playheadPosition() }
     }
 
     // Compute which chord and strum slot are active right now.
@@ -170,8 +170,9 @@ fun ChordPracticeScreen(
     val activeStepIndex: Int?
     val nextStepIndex: Int?
     val activeStrumSlot: Int?
-    if (metronomePlaying && beat != null && drillMode != ChordDrillMode.OneMinute) {
-        val loopBeat = (beat!!.serial % totalLoopBeats).toInt()
+    val currentPlayhead = playhead
+    if (metronomePlaying && currentPlayhead != null && drillMode != ChordDrillMode.OneMinute) {
+        val loopBeat = (currentPlayhead.beat.serial % totalLoopBeats).toInt()
         var acc = 0
         var found = 0
         var localBeat = 0
@@ -185,10 +186,12 @@ fun ChordPracticeScreen(
         }
         activeStepIndex = found
         nextStepIndex = (found + 1) % steps.size
-        val slotCount = strumPattern.slots.size
-        val cycle = strumPattern.cycleBeats.coerceAtLeast(1)
-        val beatInCycle = localBeat % cycle
-        activeStrumSlot = ((beatInCycle.toFloat() / cycle) * slotCount).toInt().coerceIn(0, slotCount - 1)
+        activeStrumSlot = strumSlotIndex(
+            localBeat = localBeat,
+            beatFraction = currentPlayhead.fraction,
+            cycleBeats = strumPattern.cycleBeats,
+            slotCount = strumPattern.slots.size,
+        )
     } else {
         activeStepIndex = null
         nextStepIndex = null
@@ -647,6 +650,14 @@ fun ChordPracticeScreen(
             }
         }
     }
+}
+
+/** Maps a beat index plus fractional progress [0f, 1f) to its active slot in a strumming pattern. */
+internal fun strumSlotIndex(localBeat: Int, beatFraction: Float, cycleBeats: Int, slotCount: Int): Int {
+    if (slotCount <= 0) return 0
+    val cycle = cycleBeats.coerceAtLeast(1)
+    val continuousBeat = (localBeat % cycle) + beatFraction.coerceIn(0f, 0.999f)
+    return ((continuousBeat / cycle) * slotCount).toInt().coerceIn(0, slotCount - 1)
 }
 
 @Composable

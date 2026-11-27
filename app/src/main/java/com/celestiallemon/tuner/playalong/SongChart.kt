@@ -174,22 +174,36 @@ data class SongChart(
     }
 
     /**
-     * Picks a concise 4-to-8 chord progression loop from the Chorus (or first Verse/Intro)
-     * so chord practice drills the real harmonic feel of the song.
+     * Picks a concise 4-to-8 chord progression loop from the main Chorus (avoiding Pre-Chorus / Soft Chorus),
+     * falling back to Verse or Intro, bounded to that section so chord practice drills the real groove.
      */
     fun practiceProgression(): List<ProgressionStep> {
         val playable = events.filter { it.c.isNotBlank() && !it.c.equals("N.C.", ignoreCase = true) }
         if (playable.isEmpty()) return emptyList()
 
-        val anchorIdx = events.indexOfFirst { it.section?.contains("Chorus", ignoreCase = true) == true }
+        fun isMainChorus(label: String?): Boolean {
+            val s = label?.trim() ?: return false
+            if (s.equals("Chorus", ignoreCase = true)) return true
+            return s.contains("Chorus", ignoreCase = true) &&
+                !s.contains("Pre", ignoreCase = true) &&
+                !s.contains("Soft", ignoreCase = true)
+        }
+
+        val anchorIdx = events.indexOfFirst { isMainChorus(it.section) }
             .takeIf { it >= 0 }
+            ?: events.indexOfFirst { it.section?.contains("Chorus", ignoreCase = true) == true && !it.section.contains("Pre", ignoreCase = true) }
+                .takeIf { it >= 0 }
             ?: events.indexOfFirst { it.section?.contains("Verse", ignoreCase = true) == true }
                 .takeIf { it >= 0 }
             ?: 0
 
-        val window = events.drop(anchorIdx)
+        // Bound the candidate window strictly to the selected section.
+        val nextSectionOffset = events.drop(anchorIdx + 1).indexOfFirst { !it.section.isNullOrBlank() }
+        val sectionEndIdx = if (nextSectionOffset >= 0) anchorIdx + 1 + nextSectionOffset else events.size
+        val sectionPlayable = events.subList(anchorIdx, sectionEndIdx)
             .filter { it.c.isNotBlank() && !it.c.equals("N.C.", ignoreCase = true) }
-            .take(8)
+
+        val window = sectionPlayable.take(8)
 
         // Trim repeated halves (e.g. [C, G, D, Em, C, G, D, Em] -> [C, G, D, Em]).
         val trimmed = if (window.size == 8 && window.take(4).map { it.c to it.n } == window.drop(4).map { it.c to it.n }) {

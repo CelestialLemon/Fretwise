@@ -67,6 +67,8 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
     /** Set when an unreadable save file couldn't be moved aside; saving would destroy it, so it's off. */
     @Volatile private var saveBlocked = false
     private val writeLock = Mutex()
+    /** Mutations that arrived before initial disk load completed (e.g. restored activity results). */
+    private val pendingMutations = mutableListOf<() -> Unit>()
 
     private val _state = MutableStateFlow(RepertoireUiState())
     val state: StateFlow<RepertoireUiState> = _state.asStateFlow()
@@ -115,6 +117,11 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                 videoFolderName = folderName,
             )
             if (seeded) persist()
+            if (pendingMutations.isNotEmpty()) {
+                val queued = pendingMutations.toList()
+                pendingMutations.clear()
+                queued.forEach { it() }
+            }
             // Roll over to a fresh practice set at midnight even if the app stays open.
             while (true) {
                 val untilMidnight = Duration.between(LocalDateTime.now(), LocalDate.now().plusDays(1).atStartOfDay())
@@ -177,14 +184,13 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
         )
     }
 
-    fun toggleDone(id: String) {
+    fun toggleDone(id: String) = runWhenLoaded {
         val today = _state.value.today
         updateSong(id) { it.togglePracticed(today) }
     }
 
-    fun setPracticedToday(id: String, done: Boolean) {
-        val today = _state.value.today
-        updateSong(id) { it.withPracticed(today, done) }
+    fun setPracticedOn(id: String, day: LocalDate, done: Boolean) = runWhenLoaded {
+        updateSong(id) { it.withPracticed(day, done) }
     }
 
     fun setVideoUri(id: String, uri: Uri) {
@@ -194,7 +200,9 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
                 Intent.FLAG_GRANT_READ_URI_PERMISSION,
             )
         }
-        updateSong(id) { it.copy(videoUri = uri.toString()) }
+        runWhenLoaded {
+            updateSong(id) { it.copy(videoUri = uri.toString()) }
+        }
     }
 
     fun setVideoFolder(treeUri: Uri) {
@@ -214,45 +222,20 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
      * Merges all bundled play-along charts into the repertoire: links matching existing songs to their
      * chart metadata, and adds any missing songs to L1.
      */
-    fun importBundledCharts() {
+    fun importBundledCharts() = runWhenLoaded {
         val charts = _state.value.charts.values.sortedBy { it.outputFilename.ifBlank { it.title } }
         if (charts.isEmpty()) {
             _messages.trySend(Message("No bundled play-along songs found"))
-            return
+            return@runWhenLoaded
         }
-        var added = 0
-        var linked = 0
-        val now = System.currentTimeMillis()
-        update { s ->
-            val updated = s.songs.toMutableList()
-            for ((idx, chart) in charts.withIndex()) {
-                val matchIdx = updated.indexOfFirst {
-                    it.chartId == chart.id || it.title.equals(chart.title, ignoreCase = true)
-                }
-                if (matchIdx >= 0) {
-                    val existing = updated[matchIdx]
-                    if (existing.chartId != chart.id || existing.chords.isEmpty()) {
-                        updated[matchIdx] = existing.copy(
-                            chartId = chart.id,
-                            bpm = existing.bpm ?: chart.roundedBpm,
-                            capoLabel = existing.capoLabel.ifBlank { chart.capoLabel },
-                            keyLabel = existing.keyLabel.ifBlank { chart.keyLabel },
-                            timeSig = existing.timeSig.ifBlank { chart.timeSig },
-                            chords = existing.chords.ifEmpty { chart.uniqueChords() },
-                        )
-                        linked++
-                    }
-                } else {
-                    updated.add(chartToSong(chart, now + idx))
-                    added++
-                }
-            }
-            s.copy(songs = updated)
+        val merged = mergeBundledCharts(_state.value.songs, charts, System.currentTimeMillis())
+        if (merged.added > 0 || merged.linked > 0) {
+            update { it.copy(songs = merged.songs) }
         }
         val msg = when {
-            added > 0 && linked > 0 -> "Added $added and linked $linked play-along ${plural(added + linked)}"
-            added > 0 -> "Added $added play-along ${plural(added)}"
-            linked > 0 -> "Linked $linked ${plural(linked)} to play-along guides"
+            merged.added > 0 && merged.linked > 0 -> "Added ${merged.added} and linked ${merged.linked} play-along ${plural(merged.added + merged.linked)}"
+            merged.added > 0 -> "Added ${merged.added} play-along ${plural(merged.added)}"
+            merged.linked > 0 -> "Linked ${merged.linked} ${plural(merged.linked)} to play-along guides"
             else -> "All ${charts.size} play-along songs are already in your practice list"
         }
         _messages.trySend(Message(msg))
@@ -302,11 +285,20 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
 
     fun cancelImport() = _state.update { it.copy(pendingImport = null) }
 
-    private fun updateSong(id: String, change: (Song) -> Song) =
+    private fun runWhenLoaded(op: () -> Unit) {
+        if (_state.value.loaded) op() else pendingMutations += op
+    }
+
+    private fun updateSong(id: String, change: (Song) -> Song) {
+        val current = _state.value.song(id) ?: return
+        val next = change(current)
+        if (next == current) return
         update { s -> s.copy(songs = s.songs.map { if (it.id == id) change(it) else it }) }
+    }
 
     /** Applies [change], re-plans the day so the practice set stays valid, and saves. */
     private fun update(change: (RepertoireUiState) -> RepertoireUiState) {
+        if (!_state.value.loaded) return
         _state.update { old ->
             val new = change(old)
             new.copy(plan = planDay(new.today, new.songs, new.plan))
@@ -319,8 +311,8 @@ class RepertoireViewModel(application: Application) : AndroidViewModel(applicati
             writeLock.withLock {
                 // Read the state inside the lock so the last write always holds the newest data.
                 val snapshot = _state.value
+                if (!snapshot.loaded || saveBlocked) return@withLock
                 val data = RepertoireData(songs = snapshot.songs, today = snapshot.plan)
-                if (saveBlocked) return@withLock
                 try {
                     writeAtomically(BackupFormat.json.encodeToString(RepertoireData.serializer(), data).toByteArray())
                 } catch (e: Exception) {

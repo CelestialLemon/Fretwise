@@ -1,9 +1,11 @@
 package com.celestiallemon.tuner.repertoire
 
+import com.celestiallemon.tuner.playalong.SongChart
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 
 /** How well a song is learned. Songs enter at [L1] and are promoted by hand until they reach [Memory]. */
 @Serializable
@@ -133,6 +135,86 @@ fun youtubeUrl(song: Song): String {
     if (link.isNotEmpty()) return if ("://" in link) link else "https://$link"
     val query = listOf(song.title, song.artist).filter { it.isNotBlank() }.joinToString(" ")
     return "https://www.youtube.com/results?search_query=" + java.net.URLEncoder.encode(query, "UTF-8")
+}
+
+/** Result of merging bundled play-along [SongChart]s into an existing repertoire list. */
+data class BundledMergeResult(
+    val songs: List<Song>,
+    val added: Int,
+    val linked: Int,
+)
+
+/**
+ * Merges [charts] into [existing] without ever creating duplicate song IDs or hijacking an
+ * already-linked song that was renamed:
+ * 1. First match existing songs strictly by `chartId == chart.id`.
+ * 2. Only for charts still unmatched, match unlinked songs (`chartId.isNullOrBlank()`) by title.
+ * 3. Append any remaining charts using a guaranteed-unique song ID.
+ */
+fun mergeBundledCharts(existing: List<Song>, charts: List<SongChart>, now: Long): BundledMergeResult {
+    val updated = existing.toMutableList()
+    val usedIds = updated.mapTo(mutableSetOf()) { it.id }
+    val matchedChartIds = mutableSetOf<String>()
+    var linked = 0
+    var added = 0
+
+    // Pass 1: exact chartId match (never hijack a song already linked to another chart).
+    for (chart in charts) {
+        val idx = updated.indexOfFirst { it.chartId == chart.id }
+        if (idx >= 0) {
+            matchedChartIds += chart.id
+            val current = updated[idx]
+            val refreshed = current.copy(
+                bpm = current.bpm ?: chart.roundedBpm,
+                capoLabel = current.capoLabel.ifBlank { chart.capoLabel },
+                keyLabel = current.keyLabel.ifBlank { chart.keyLabel },
+                timeSig = current.timeSig.ifBlank { chart.timeSig },
+                chords = current.chords.ifEmpty { chart.uniqueChords() },
+            )
+            if (refreshed != current) {
+                updated[idx] = refreshed
+                linked++
+            }
+        }
+    }
+
+    // Pass 2: link unlinked songs by title, or append missing charts with unique IDs.
+    for ((idx, chart) in charts.withIndex()) {
+        if (chart.id in matchedChartIds) continue
+        val titleMatch = updated.indexOfFirst { it.chartId.isNullOrBlank() && it.title.equals(chart.title, ignoreCase = true) }
+        if (titleMatch >= 0) {
+            val current = updated[titleMatch]
+            updated[titleMatch] = current.copy(
+                chartId = chart.id,
+                bpm = current.bpm ?: chart.roundedBpm,
+                capoLabel = current.capoLabel.ifBlank { chart.capoLabel },
+                keyLabel = current.keyLabel.ifBlank { chart.keyLabel },
+                timeSig = current.timeSig.ifBlank { chart.timeSig },
+                chords = current.chords.ifEmpty { chart.uniqueChords() },
+            )
+            linked++
+        } else {
+            val preferredId = "chart-${chart.id}"
+            val uniqueId = if (preferredId !in usedIds) preferredId else UUID.randomUUID().toString()
+            usedIds += uniqueId
+            updated += Song(
+                id = uniqueId,
+                title = chart.title,
+                artist = chart.artist,
+                bpm = chart.roundedBpm,
+                level = Level.L1,
+                levelSince = now + idx,
+                addedAt = now + idx,
+                chartId = chart.id,
+                capoLabel = chart.capoLabel,
+                keyLabel = chart.keyLabel,
+                timeSig = chart.timeSig,
+                chords = chart.uniqueChords(),
+            )
+            added++
+        }
+    }
+    return BundledMergeResult(updated, added, linked)
 }
 
 object BackupFormat {

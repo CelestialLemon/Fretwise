@@ -87,8 +87,12 @@ class MainActivity : ComponentActivity() {
                     if (result.resultCode == Activity.RESULT_OK) {
                         val data = result.data ?: return@rememberLauncherForActivityResult
                         val songId = data.getStringExtra(PlayAlongActivity.RESULT_SONG_ID) ?: return@rememberLauncherForActivityResult
-                        val done = data.getBooleanExtra(PlayAlongActivity.RESULT_PRACTICED_TODAY, false)
-                        repertoire.setPracticedToday(songId, done)
+                        if (data.getBooleanExtra(PlayAlongActivity.RESULT_PRACTICED_CHANGED, false)) {
+                            val done = data.getBooleanExtra(PlayAlongActivity.RESULT_PRACTICED_TODAY, false)
+                            val dateStr = data.getStringExtra(PlayAlongActivity.RESULT_PRACTICED_DATE)
+                            val day = runCatching { dateStr?.let(java.time.LocalDate::parse) }.getOrNull() ?: repertoireState.today
+                            repertoire.setPracticedOn(songId, day, done)
+                        }
                         data.getStringExtra(PlayAlongActivity.RESULT_VIDEO_URI)?.let { uriStr ->
                             repertoire.setVideoUri(songId, uriStr.toUri())
                         }
@@ -102,7 +106,9 @@ class MainActivity : ComponentActivity() {
                 fun launchPlayAlong(song: Song) {
                     metronome.stop()
                     val practiced = song.practicedOn(repertoireState.today)
-                    playAlongLauncher.launch(PlayAlongActivity.createIntent(this@MainActivity, song, practiced))
+                    playAlongLauncher.launch(
+                        PlayAlongActivity.createIntent(this@MainActivity, song, practiced, repertoireState.today.toString()),
+                    )
                 }
 
                 // The clicks would confuse the pitch detector, so the metronome stops when the tuner opens,

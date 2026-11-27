@@ -38,7 +38,16 @@ class MetronomeEngine {
     @Volatile private var track: AudioTrack? = null
 
     /** A beat that has been written to the stream. */
-    data class Beat(val frame: Long, val serial: Long, val index: Int, val accent: Accent)
+    data class Beat(
+        val frame: Long,
+        val serial: Long,
+        val index: Int,
+        val accent: Accent,
+        val periodFrames: Long = 1L,
+    )
+
+    /** The audible beat together with fractional progress [0f, 1f) through that beat. */
+    data class PlayheadPosition(val beat: Beat, val fraction: Float)
 
     private val log = ArrayDeque<Beat>()
 
@@ -89,10 +98,16 @@ class MetronomeEngine {
     }
 
     /** The latest beat whose click has reached the speaker, or null before the first one. */
-    fun playheadBeat(): Beat? {
+    fun playheadBeat(): Beat? = playheadPosition()?.beat
+
+    /** The latest audible beat and fractional progress [0f, 1f) into it. */
+    fun playheadPosition(): PlayheadPosition? {
         val t = track ?: return null
         val head = runCatching { t.playbackHeadPosition.toLong() and 0xFFFFFFFFL }.getOrNull() ?: return null
-        return synchronized(log) { log.lastOrNull { it.frame <= head } }
+        val beat = synchronized(log) { log.lastOrNull { it.frame <= head } } ?: return null
+        val period = beat.periodFrames.coerceAtLeast(1L)
+        val fraction = ((head - beat.frame).toFloat() / period.toFloat()).coerceIn(0f, 0.999f)
+        return PlayheadPosition(beat, fraction)
     }
 
     /** Plays until [running] goes false. Returns false if the audio stream failed. */
@@ -136,7 +151,8 @@ class MetronomeEngine {
                 while (i < chunk.size) {
                     val frame = written + i
                     // Measured from the previous beat with the current tempo, so tempo changes apply at once.
-                    val due = if (lastBeat < 0) 0L else lastBeat + (sampleRate * 60.0 / bpm).toLong()
+                    val periodFrames = (sampleRate * 60.0 / bpm).toLong().coerceAtLeast(1L)
+                    val due = if (lastBeat < 0) 0L else lastBeat + periodFrames
                     if (frame >= due) {
                         lastBeat = frame
                         if (restartBar) {
@@ -147,7 +163,7 @@ class MetronomeEngine {
                         val index = beatInBar % sig.beats
                         val accent = sig.accent(index)
                         synchronized(log) {
-                            log.addLast(Beat(frame, serial++, index, accent))
+                            log.addLast(Beat(frame, serial++, index, accent, periodFrames))
                             while (log.size > 32) log.removeFirst()
                         }
                         sound = clicks.getValue(accent)

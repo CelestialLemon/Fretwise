@@ -82,7 +82,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -104,13 +107,18 @@ import kotlinx.coroutines.delay
 
 /**
  * Full-screen landscape play-along video player with speed control (0.5x–1.0x), section jumping,
- * section looping, capo reminder, and direct "Practiced today" marking.
+ * section looping, capo reminder, lifecycle-aware pause, and direct "Practiced today" marking.
  */
 class PlayAlongActivity : ComponentActivity() {
+    private var songId: String = ""
     private var practicedToday = false
+    private var practicedChanged = false
+    private var practicedDate: String = ""
     private var linkedVideoUri: String? = null
     private var openChordsOnExit = false
-    private var songId: String = ""
+    private var savedPositionMs: Long = 0L
+    private var savedSpeed: Float = 1.0f
+    private var savedLoopSectionIndex: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -129,7 +137,16 @@ class PlayAlongActivity : ComponentActivity() {
         val keyLabel = intent.getStringExtra(EXTRA_KEY_LABEL).orEmpty()
         val link = intent.getStringExtra(EXTRA_LINK).orEmpty()
         val initialVideoUri = intent.getStringExtra(EXTRA_VIDEO_URI).orEmpty()
-        practicedToday = intent.getBooleanExtra(EXTRA_PRACTICED_TODAY, false)
+
+        practicedToday = savedInstanceState?.getBoolean(STATE_PRACTICED_TODAY)
+            ?: intent.getBooleanExtra(EXTRA_PRACTICED_TODAY, false)
+        practicedChanged = savedInstanceState?.getBoolean(STATE_PRACTICED_CHANGED) ?: false
+        practicedDate = savedInstanceState?.getString(STATE_PRACTICED_DATE)
+            ?: intent.getStringExtra(EXTRA_PRACTICED_DATE).orEmpty()
+        linkedVideoUri = savedInstanceState?.getString(STATE_LINKED_VIDEO_URI)
+        savedPositionMs = savedInstanceState?.getLong(STATE_POSITION_MS, 0L) ?: 0L
+        savedSpeed = savedInstanceState?.getFloat(STATE_SPEED, 1.0f) ?: 1.0f
+        savedLoopSectionIndex = savedInstanceState?.getInt(STATE_LOOP_SECTION_INDEX, -1) ?: -1
 
         val chart = ChartRepository.loadBundled(this).firstOrNull { it.id == chartId }
         val videoLibrary = VideoLibrary(this)
@@ -143,7 +160,7 @@ class PlayAlongActivity : ComponentActivity() {
             chartId = chartId,
             capoLabel = capoLabel,
             keyLabel = keyLabel,
-            videoUri = initialVideoUri,
+            videoUri = linkedVideoUri ?: initialVideoUri,
         )
 
         setContent {
@@ -157,7 +174,7 @@ class PlayAlongActivity : ComponentActivity() {
                             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         videoLibrary.folderUri = uri
-                        resolvedUri = videoLibrary.resolveVideo(placeholderSong, chart)
+                        resolvedUri = videoLibrary.resolveVideo(placeholderSong.copy(videoUri = ""), chart)
                     }
                 }
                 val filePicker = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -166,6 +183,7 @@ class PlayAlongActivity : ComponentActivity() {
                             contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
                         linkedVideoUri = uri.toString()
+                        savedPositionMs = 0L
                         resolvedUri = uri
                     }
                 }
@@ -177,10 +195,19 @@ class PlayAlongActivity : ComponentActivity() {
                     keyLabel = keyLabel.ifBlank { chart?.keyLabel.orEmpty() },
                     chart = chart,
                     videoUri = resolvedUri,
+                    initialPositionMs = savedPositionMs,
+                    initialSpeed = savedSpeed,
+                    initialLoopSectionIndex = savedLoopSectionIndex,
                     practicedToday = practiced,
+                    onPlaybackStateSnapshot = { posMs, spd, loopIdx ->
+                        savedPositionMs = posMs
+                        savedSpeed = spd
+                        savedLoopSectionIndex = loopIdx
+                    },
                     onTogglePracticed = {
                         practiced = !practiced
                         practicedToday = practiced
+                        practicedChanged = true
                     },
                     onPickFolder = { folderPicker.launch(null) },
                     onPickFile = { filePicker.launch(arrayOf("video/*")) },
@@ -193,6 +220,17 @@ class PlayAlongActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(STATE_PRACTICED_TODAY, practicedToday)
+        outState.putBoolean(STATE_PRACTICED_CHANGED, practicedChanged)
+        outState.putString(STATE_PRACTICED_DATE, practicedDate)
+        linkedVideoUri?.let { outState.putString(STATE_LINKED_VIDEO_URI, it) }
+        outState.putLong(STATE_POSITION_MS, savedPositionMs)
+        outState.putFloat(STATE_SPEED, savedSpeed)
+        outState.putInt(STATE_LOOP_SECTION_INDEX, savedLoopSectionIndex)
     }
 
     override fun finish() {
@@ -210,7 +248,9 @@ class PlayAlongActivity : ComponentActivity() {
             Activity.RESULT_OK,
             Intent().apply {
                 putExtra(RESULT_SONG_ID, songId)
+                putExtra(RESULT_PRACTICED_CHANGED, practicedChanged)
                 putExtra(RESULT_PRACTICED_TODAY, practicedToday)
+                putExtra(RESULT_PRACTICED_DATE, practicedDate)
                 linkedVideoUri?.let { putExtra(RESULT_VIDEO_URI, it) }
                 putExtra(RESULT_OPEN_CHORDS, openChordsOnExit)
             },
@@ -233,13 +273,24 @@ class PlayAlongActivity : ComponentActivity() {
         private const val EXTRA_LINK = "link"
         private const val EXTRA_VIDEO_URI = "video_uri"
         private const val EXTRA_PRACTICED_TODAY = "practiced_today"
+        private const val EXTRA_PRACTICED_DATE = "practiced_date"
+
+        private const val STATE_PRACTICED_TODAY = "state_practiced_today"
+        private const val STATE_PRACTICED_CHANGED = "state_practiced_changed"
+        private const val STATE_PRACTICED_DATE = "state_practiced_date"
+        private const val STATE_LINKED_VIDEO_URI = "state_linked_video_uri"
+        private const val STATE_POSITION_MS = "state_position_ms"
+        private const val STATE_SPEED = "state_speed"
+        private const val STATE_LOOP_SECTION_INDEX = "state_loop_section_index"
 
         const val RESULT_SONG_ID = "result_song_id"
+        const val RESULT_PRACTICED_CHANGED = "result_practiced_changed"
         const val RESULT_PRACTICED_TODAY = "result_practiced_today"
+        const val RESULT_PRACTICED_DATE = "result_practiced_date"
         const val RESULT_VIDEO_URI = "result_video_uri"
         const val RESULT_OPEN_CHORDS = "result_open_chords"
 
-        fun createIntent(context: Context, song: Song, practicedToday: Boolean): Intent =
+        fun createIntent(context: Context, song: Song, practicedToday: Boolean, practicedDateIso: String): Intent =
             Intent(context, PlayAlongActivity::class.java).apply {
                 putExtra(EXTRA_SONG_ID, song.id)
                 putExtra(EXTRA_TITLE, song.title)
@@ -250,6 +301,7 @@ class PlayAlongActivity : ComponentActivity() {
                 putExtra(EXTRA_LINK, song.link)
                 putExtra(EXTRA_VIDEO_URI, song.videoUri)
                 putExtra(EXTRA_PRACTICED_TODAY, practicedToday)
+                putExtra(EXTRA_PRACTICED_DATE, practicedDateIso)
             }
     }
 }
@@ -265,7 +317,11 @@ private fun PlayAlongScreen(
     keyLabel: String,
     chart: SongChart?,
     videoUri: Uri?,
+    initialPositionMs: Long,
+    initialSpeed: Float,
+    initialLoopSectionIndex: Int,
     practicedToday: Boolean,
+    onPlaybackStateSnapshot: (positionMs: Long, speed: Float, loopSectionIndex: Int) -> Unit,
     onTogglePracticed: () -> Unit,
     onPickFolder: () -> Unit,
     onPickFile: () -> Unit,
@@ -277,7 +333,13 @@ private fun PlayAlongScreen(
         MissingVideoScreen(
             title = title,
             artist = artist,
-            expectedFilename = chart?.outputFilename.orEmpty(),
+            overline = "Play-along video not on device yet",
+            message = if (!chart?.outputFilename.isNullOrBlank()) {
+                "Copy your play-along videos onto your phone, then choose their folder once (looking for “${chart.outputFilename}”)."
+            } else {
+                "Choose the folder where your play-along .mp4 videos live, or pick a video file for this song."
+            },
+            onRetry = null,
             onPickFolder = onPickFolder,
             onPickFile = onPickFile,
             onOpenYouTube = onOpenYouTube,
@@ -292,9 +354,14 @@ private fun PlayAlongScreen(
         chart?.capoFret() ?: Regex("""Capo\s+(\d+)""", RegexOption.IGNORE_CASE).find(capoLabel)?.groupValues?.getOrNull(1)?.toIntOrNull()
     }
 
-    val player = remember(videoUri) {
+    var retryNonce by remember { mutableLongStateOf(0L) }
+    var playbackError by remember(videoUri, retryNonce) { mutableStateOf<String?>(null) }
+
+    val player = remember(videoUri, retryNonce) {
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(MediaItem.fromUri(videoUri))
+            playbackParameters = PlaybackParameters(initialSpeed)
+            if (initialPositionMs > 0L) seekTo(initialPositionMs)
             prepare()
             playWhenReady = false
         }
@@ -302,12 +369,25 @@ private fun PlayAlongScreen(
 
     var isPlaying by remember { mutableStateOf(false) }
     var ended by remember { mutableStateOf(false) }
-    var positionMs by remember { mutableLongStateOf(0L) }
-    var durationMs by remember { mutableLongStateOf(((chart?.durationSec ?: 0.0) * 1000).toLong()) }
-    var speed by remember { mutableFloatStateOf(1.0f) }
+    var positionMs by remember(videoUri) { mutableLongStateOf(initialPositionMs) }
+    var durationMs by remember(videoUri) { mutableLongStateOf(((chart?.durationSec ?: 0.0) * 1000).toLong()) }
+    var speed by remember { mutableFloatStateOf(initialSpeed) }
     var controlsVisible by remember { mutableStateOf(true) }
-    var loopedSection by remember { mutableStateOf<SongSection?>(null) }
-    var userStartedOnce by remember { mutableStateOf(false) }
+    var loopedSection by remember(sections) {
+        mutableStateOf(sections.firstOrNull { it.index == initialLoopSectionIndex })
+    }
+    var userStartedOnce by remember(videoUri) { mutableStateOf(initialPositionMs > 0L) }
+
+    // Keep Activity snapshot fresh so process/config recreation restores playback state.
+    LaunchedEffect(positionMs, speed, loopedSection) {
+        onPlaybackStateSnapshot(positionMs, speed, loopedSection?.index ?: -1)
+    }
+
+    // Pause immediately when leaving the foreground (Home, lock screen, incoming call).
+    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+        onPlaybackStateSnapshot(player.currentPosition.coerceAtLeast(0L), speed, loopedSection?.index ?: -1)
+        player.pause()
+    }
 
     DisposableEffect(player) {
         val listener = object : Player.Listener {
@@ -315,6 +395,7 @@ private fun PlayAlongScreen(
                 isPlaying = playing
                 if (playing) {
                     ended = false
+                    playbackError = null
                     userStartedOnce = true
                 }
             }
@@ -328,26 +409,34 @@ private fun PlayAlongScreen(
                     controlsVisible = true
                 }
             }
+
+            override fun onPlayerError(error: PlaybackException) {
+                isPlaying = false
+                playbackError = error.localizedMessage ?: "Unsupported or unreadable video file."
+            }
         }
         player.addListener(listener)
         onDispose {
+            onPlaybackStateSnapshot(player.currentPosition.coerceAtLeast(0L), speed, loopedSection?.index ?: -1)
             player.removeListener(listener)
             player.release()
         }
     }
 
-    // Poll playback position and enforce section looping.
-    LaunchedEffect(player, loopedSection) {
+    // Poll playback position and enforce section looping only while actively playing.
+    LaunchedEffect(player, loopedSection, isPlaying) {
+        if (!isPlaying) return@LaunchedEffect
         while (true) {
             val pos = player.currentPosition.coerceAtLeast(0L)
             positionMs = pos
             if (player.duration > 0L) durationMs = player.duration
             val loop = loopedSection
-            if (loop != null && player.isPlaying) {
+            if (loop != null) {
                 val loopEndMs = (loop.endSec * 1000.0).toLong()
                 val loopStartMs = (loop.startSec * 1000.0).toLong()
                 if (loopEndMs > loopStartMs && pos >= loopEndMs) {
                     player.seekTo(loopStartMs)
+                    positionMs = loopStartMs
                 }
             }
             delay(120)
@@ -360,6 +449,24 @@ private fun PlayAlongScreen(
             delay(4_000)
             controlsVisible = false
         }
+    }
+
+    if (playbackError != null) {
+        MissingVideoScreen(
+            title = title,
+            artist = artist,
+            overline = "Couldn't play this video",
+            message = "The selected video couldn't be decoded or read (${playbackError}). Pick another video file or choose a different folder.",
+            onRetry = {
+                playbackError = null
+                retryNonce++
+            },
+            onPickFolder = onPickFolder,
+            onPickFile = onPickFile,
+            onOpenYouTube = onOpenYouTube,
+            onBack = onBack,
+        )
+        return
     }
 
     val activeSection = remember(sections, positionMs) {
@@ -509,7 +616,11 @@ private fun PlayAlongScreen(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconButton(
-                        onClick = { player.seekTo((player.currentPosition - 10_000L).coerceAtLeast(0L)) },
+                        onClick = {
+                            val target = (player.currentPosition - 10_000L).coerceAtLeast(0L)
+                            player.seekTo(target)
+                            positionMs = target
+                        },
                         modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f)),
                     ) {
                         Icon(Icons.Rounded.Replay10, "Back 10 seconds", tint = Palette.Bone, modifier = Modifier.size(30.dp))
@@ -528,7 +639,9 @@ private fun PlayAlongScreen(
                     IconButton(
                         onClick = {
                             val max = durationMs.takeIf { it > 0L } ?: Long.MAX_VALUE
-                            player.seekTo((player.currentPosition + 10_000L).coerceAtMost(max))
+                            val target = (player.currentPosition + 10_000L).coerceAtMost(max)
+                            player.seekTo(target)
+                            positionMs = target
                         },
                         modifier = Modifier.size(52.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.45f)),
                     ) {
@@ -558,7 +671,9 @@ private fun PlayAlongScreen(
                                 onClick = {
                                     loopedSection = if (loopActive) null else loopTarget
                                     if (!loopActive) {
-                                        player.seekTo((loopTarget.startSec * 1000.0).toLong())
+                                        val startMs = (loopTarget.startSec * 1000.0).toLong()
+                                        player.seekTo(startMs)
+                                        positionMs = startMs
                                     }
                                 },
                                 shape = CircleShape,
@@ -599,7 +714,9 @@ private fun PlayAlongScreen(
                                                 },
                                             )
                                             .clickable {
-                                                player.seekTo((sec.startSec * 1000.0).toLong())
+                                                val startMs = (sec.startSec * 1000.0).toLong()
+                                                player.seekTo(startMs)
+                                                positionMs = startMs
                                                 if (loopedSection != null) loopedSection = sec
                                             }
                                             .padding(horizontal = 11.dp, vertical = 6.dp),
@@ -685,6 +802,7 @@ private fun PlayAlongScreen(
                                 onClick = {
                                     ended = false
                                     player.seekTo(0L)
+                                    positionMs = 0L
                                     player.play()
                                 },
                                 modifier = Modifier.weight(1f).height(44.dp),
@@ -711,7 +829,9 @@ private fun PlayAlongScreen(
 private fun MissingVideoScreen(
     title: String,
     artist: String,
-    expectedFilename: String,
+    overline: String,
+    message: String,
+    onRetry: (() -> Unit)?,
     onPickFolder: () -> Unit,
     onPickFile: () -> Unit,
     onOpenYouTube: () -> Unit,
@@ -733,7 +853,7 @@ private fun MissingVideoScreen(
             modifier = Modifier.align(Alignment.Center).widthIn(max = 520.dp),
         ) {
             Column(Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Overline("Play-along video not on device yet")
+                Overline(overline)
                 Spacer(Modifier.height(6.dp))
                 Text(
                     if (artist.isNotBlank()) "$title — $artist" else title,
@@ -742,11 +862,7 @@ private fun MissingVideoScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    if (expectedFilename.isNotBlank()) {
-                        "Copy your play-along videos onto your phone, then choose their folder once (looking for “$expectedFilename”)."
-                    } else {
-                        "Choose the folder where your play-along .mp4 videos live, or pick a video file for this song."
-                    },
+                    message,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -773,8 +889,15 @@ private fun MissingVideoScreen(
                     }
                 }
                 Spacer(Modifier.height(8.dp))
-                TextButton(onClick = onOpenYouTube) {
-                    Text("Open on YouTube instead")
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (onRetry != null) {
+                        TextButton(onClick = onRetry) {
+                            Text("Retry")
+                        }
+                    }
+                    TextButton(onClick = onOpenYouTube) {
+                        Text("Open on YouTube instead")
+                    }
                 }
             }
         }

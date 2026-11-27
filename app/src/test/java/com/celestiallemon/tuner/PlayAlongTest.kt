@@ -8,6 +8,8 @@ import com.celestiallemon.tuner.playalong.SongChart
 import com.celestiallemon.tuner.repertoire.BackupFormat
 import com.celestiallemon.tuner.repertoire.Level
 import com.celestiallemon.tuner.repertoire.Song
+import com.celestiallemon.tuner.repertoire.mergeBundledCharts
+import com.celestiallemon.tuner.ui.strumSlotIndex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -106,5 +108,44 @@ class PlayAlongTest {
         assertEquals(listOf("2026-11-27"), done.practiced)
         assertEquals(done, done.withPracticed(day, true))
         assertEquals(emptyList<String>(), done.withPracticed(day, false).practiced)
+    }
+
+    @Test
+    fun practiceProgressionPicksChorusNotPreChorus() {
+        val perfect = SongChart.decode(File(chartsDir, "perfect.json").readText())
+        val prog = perfect.practiceProgression()
+        assertEquals(listOf("Em", "C", "G", "D"), prog.map { it.chord })
+        assertEquals(listOf(6, 6, 6, 6), prog.map { it.beats })
+
+        val mine = SongChart.decode(File(chartsDir, "mine.json").readText())
+        assertEquals(listOf("C", "G", "D", "Em"), mine.practiceProgression().map { it.chord })
+    }
+
+    @Test
+    fun mergeBundledChartsNeverCreatesDuplicateIdsAfterRename() {
+        val charts = chartsDir.listFiles { f -> f.extension == "json" }!!
+            .sortedBy { it.name }
+            .map { SongChart.decode(it.readText()) }
+        val initial = mergeBundledCharts(emptyList(), charts, 1_000L).songs
+        // Rename seeded Mine to Speak Now and sync twice.
+        val renamed = initial.map { if (it.chartId == "mine") it.copy(title = "Speak Now") else it }
+        val pass1 = mergeBundledCharts(renamed, charts, 2_000L)
+        val pass2 = mergeBundledCharts(pass1.songs, charts, 3_000L)
+
+        assertEquals(pass2.songs.size, pass2.songs.map { it.id }.toSet().size)
+        assertEquals(0, pass2.added)
+        assertEquals(0, pass2.linked)
+        // Backup round-trip must accept the merged repertoire cleanly.
+        assertEquals(pass2.songs, BackupFormat.decode(BackupFormat.encode(pass2.songs)))
+    }
+
+    @Test
+    fun strumSlotIndexCoversEveryOffbeatSlot() {
+        val visited = mutableSetOf<Int>()
+        for (beat in 0 until 4) {
+            visited += strumSlotIndex(beat, 0.1f, cycleBeats = 4, slotCount = 8)
+            visited += strumSlotIndex(beat, 0.6f, cycleBeats = 4, slotCount = 8)
+        }
+        assertEquals((0..7).toSet(), visited)
     }
 }
